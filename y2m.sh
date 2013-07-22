@@ -58,7 +58,7 @@ if [[ $address =~ $regex ]]; then
         # download the FLV stream
         youtube-dl -o "$video_title".flv $address
 
-    ffmpeg -i "$video_title".flv -i "$thumb".jpg -acodec libmp3lame -ac 2 -ab 256k -vn -y "$video_title".mp3
+    ffmpeg -i "$video_title".flv -i "$thumb".jpg -acodec libmp3lame -ac 2 -ab 320k -vn -y "$video_title".mp3
 
         # untested
        if [[ $dir ]]; then
