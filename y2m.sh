@@ -2,7 +2,7 @@
 # Youtube to MP3 Bash Script
  
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2013-25-06 @ 10:45:38
+# MOD : 2013-22-07 @ 12:01:20
 # VER : Version 3
 
 # Ubuntu
@@ -18,24 +18,28 @@
 # REQ : su -c 'yum localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-18.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-18.noarch.rpm'
 # REQ : sudo yum -y install gstreamer gstreamer-ffmpeg gstreamer-plugins-bad gstreamer-plugins-bad-free gstreamer-plugins-bad-nonfree gstreamer-plugins-base gstreamer-plugins-good gstreamer-plugins-ugly ffmpeg yasm yasm-devel
 
-# long-opts not yet supported
+# no long-opts supported except --help
 while getopts 'v:d:-:' OPT; do
   case $OPT in
     v) address=$OPTARG;;
     d) dir=$OPTARG;;
-#    -) #long option
-#       case $OPTARG in
-#         long-option) echo long option;;
-#         *) echo long option: $OPTARG;;
-#       esac;;
-    *) echo $OPTARG;;
+    -) #long option
+       case $OPTARG in
+
+         help) echo 'Long:  y2m -d {directory} -v {ex: http://www.youtube.com/watch?v=oHg5SJYRHA0‎}'
+           echo 'Short: y2m {ex: http://www.youtube.com/watch?v=oHg5SJYRHA0‎}'
+           exit;;
+
+       esac;;
   esac
 done
 
 # if short order (y2m http://addy.com)
 if [ -e $address ]; then
     address=$1
-    dir='~/Music/Indie/'
+
+    # default to /home/{user}/Music
+    dir='~/Music/'  
 fi
 
 regex='v=(.*)'
@@ -56,12 +60,13 @@ if [[ $address =~ $regex ]]; then
 
     ffmpeg -i "$video_title".flv -i "$thumb".jpg -acodec libmp3lame -ac 2 -ab 256k -vn -y "$video_title".mp3
 
-#       if [[ $dir ]]; then
-#         if [[ ! -d $dir ]]; then
-#           echo "Creating directory $dir"
-#           mkdir -p $dir
-#         fi
-#       fi
+        # untested
+       if [[ $dir ]]; then
+         if [[ ! -d $dir ]]; then
+           echo "Creating directory $dir"
+           mkdir -p $dir
+         fi
+       fi
 
     mv "$video_title".mp3 $dir
     rm "$video_title".flv "$thumb".jpg
