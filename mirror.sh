@@ -66,8 +66,8 @@ do
     # move to svn
     cd $SVN_FOLDER
 
-    ADD=$(svn st |grep '?\|M' |awk '{printf "%s ", $2}'); [  -z "$ADD" ] && svn add $ADD
-    REM=$(svn st |grep 'D\|!' |awk '{printf "%s ", $2}'); [  -z "$REM" ] && svn rm  $REM
+    ADD=$(svn st |grep '?\|M' |awk '{printf "%s ", $2}'); [  -z "$ADD" ] || svn add $ADD
+    REM=$(svn st |grep 'D\|!' |awk '{printf "%s ", $2}'); [  -z "$REM" ] || svn rm  $REM
 
 
   break # just on rev for now
