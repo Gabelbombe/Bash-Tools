@@ -1,0 +1,26 @@
+[jdaniel@localhost clone]$ ./mirror.sh > mirror.log 
+Checked out HEAD:
+  https://github.com/ehime/Restful-MVC-Prototype/trunk r1
+svn: E150000: Can't find parent directory's node while trying to add '/home/jdaniel/www/clone/svn/.idea/encodings.xml'
+svn: E155010: The node '/home/jdaniel/www/clone/svn/.idea' was not found.
+svn: warning: W155010: The node '/home/jdaniel/www/clone/svn/src/Restful/v1' was not found.
+svn: warning: W155010: The node '/home/jdaniel/www/clone/svn/src/Restful/v1/views' was not found.
+svn: warning: W155010: The node '/home/jdaniel/www/clone/svn/src/Restful/v1/views' was not found.
+svn: E200009: Could not add all targets because some targets don't exist
+svn: E200009: Illegal target for the requested operation
+svn: warning: W155010: The node '/home/jdaniel/www/clone/svn/src/app' was not found.
+svn: warning: W155010: The node '/home/jdaniel/www/clone/svn/src/app' was not found.
+svn: E200009: Could not add all targets because some targets don't exist
+svn: E200009: Illegal target for the requested operation
+W: -empty_dir: trunk/src/REST
+svn: E155010: '/home/jdaniel/www/clone/svn/src/REST/v1/Controllers/HomeController.php' cannot be deleted
+svn: E155010: '/home/jdaniel/www/clone/svn/src/REST/v1/Views/home/hello.php' cannot be deleted
+svn: E155010: '/home/jdaniel/www/clone/svn/src/REST/v1/Views/home/index.php' cannot be deleted
+svn: E150000: Can't find parent directory's node while trying to add '/home/jdaniel/www/clone/svn/sql/deveresponsecom.sql'
+svn: E155010: The node '/home/jdaniel/www/clone/svn/sql' was not found.
+W: -empty_dir: trunk/src/REST
+W: -empty_dir: trunk/.idea
+cp: cannot stat ‘.idea/workspace.xml’: No such file or directory
+svn: warning: W155010: '/home/jdaniel/www/clone/svn/.idea/workspace.xml' not found
+svn: E200009: Could not add all targets because some targets don't exist
+svn: E200009: Illegal target for the requested operation
