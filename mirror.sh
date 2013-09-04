@@ -1,32 +1,34 @@
-#!/bin/bash
+#!/bin/env bash
+# Converter for GitHub -> Subversion Repositories
 
-clear; set -x
+# CPR : Jd Daniel :: Ehime-ken
+# MOD : 2013-03-09 @ 16:26:53
+# VER : Version 1b
 
-# using ssh-keys
-#echo "Enter password: "
-#read -s PAS
+clear; #set -x #debug
+
+REPO=svn+ssh://jdaniel@forge.erado.com/home/forge/svn/erado/saas/api/archiving
+
+echo "Burning Repo..."
+svn rm    $REPO/{trunk,tags,branches} -m "Burning..." 
+
+echo "Rebuilding Repo...."
+svn mkdir $REPO/{trunk,tags,branches} -m "Rebuilding..." 
 
 # cleanup
 find -maxdepth 1 -type d ! -name '.*' |xargs rm -rf; # tmp
-
 URL=https://github.com/ehime/Restful-MVC-Prototype/
-SVN=svn+ssh://jdaniel@forge.erado.com/home/forge/svn/erado/saas/api/archiving/trunk
+SVN="${REPO}/trunk"
 
-# current location
-ROOT=`pwd`
 
 # dirs
-SVN_FOLDER="${ROOT}/svn"
-GIT_FOLDER="${ROOT}/git"
+SVN_FOLDER=`pwd`"/svn"
+GIT_FOLDER=`pwd`"/git"
+
 
 # revs
 ENDREV=`svn info $URL |grep Revision: | awk '{print $2}'`
 CURREV=1
-
-# blacklist
-EXCLUDE=('.git' '.idea')
-EXCLUDE_PATTERN=$(IFS='|'; echo "${EXCLUDE[*]}")
-EXCLUDE_PATTERN=${EXCLUDE_PATTERN//./\\.}
 
   mkdir -p $SVN_FOLDER $GIT_FOLDER
 
@@ -40,39 +42,80 @@ echo -e "\nDownloading GIT repo\n"
   cd $GIT_FOLDER
   git svn init -s $URL
 
-  # now in technicolor
-  git config --global color.ui "auto"
 
-for (( r=$CURREV; r<$ENDREV+1; r++ ))
-do
+  for (( REVISION=$CURREV; REVISION<$ENDREV+1; REVISION++ ))
+  do
 
-  git svn fetch -r $CURREV
+    cd $GIT_FOLDER
 
-  # move whitelists subversion folder
-  find "$GIT_FOLDER" \
-    -mindepth 1 \
-    -maxdepth 1 \
-    -regextype posix-egrep \
-    -not -regex ".*/(${EXCLUDE_PATTERN})$" \
-    -exec mv -t "$SVN_FOLDER" '{}' '+'
+    echo -e "\n---> FETCHING: ${REVISION}\n"
+
+    git svn fetch -r$REVISION;                echo -e "\n"
+    git rebase `git svn find-rev r$REVISION`; echo -e "\n"
+
+    # STATUS: git log -p -1 `git svn find-rev r19` --pretty=format: --name-only --diff-filter=A | sort -u
+    ADD=$(git log -p -1 `git svn find-rev r19` --pretty=format: --name-only --diff-filter=A |awk '{printf "%s ", $1}')
+    MOD=$(git log -p -1 `git svn find-rev r19` --pretty=format: --name-only --diff-filter=M |awk '{printf "%s ", $1}')
+    DEL=$(git log -p -1 `git svn find-rev r19` --pretty=format: --name-only --diff-filter=D |awk '{printf "%s ", $1}')
+
+      # copy new files
+      for i in $ADD
+      do 
+         cp --parents $i $SVN_FOLDER/
+      done
+
+
+      # copy modified files
+      for i in $MOD
+      do 
+         cp --parents $i $SVN_FOLDER/
+      done
+
 
     # set opts for SVN logging
-    CID=$(git log --format=oneline |awk '{print $1}')
-    AUTHOR='Jd Daniel <jdaniel@erado.com>'
-    DATE=$(git log --date=iso |grep 'Date' |awk -v N=2 '{sep=""; for (i=N; i<=NF; i++) {printf("%s%s",sep,$i); sep=OFS}; printf("\n")}')
-    LOGMSG=$(git log --oneline |awk -v N=2 '{sep=""; for (i=N; i<=NF; i++) {printf("%s%s",sep,$i); sep=OFS}; printf("\n")}')
+    HASH=$(git log -1 --pretty=format:'Hash: %h <%H>')
+    AUTHOR='Jd Daniel <jdaniel@erado.com>'  # or $(git log -1 --pretty="%cn <%cE>")
 
+    TMPDATE=$(git log -1 --pretty=%ad --date=iso8601)
+    DATE=$(date --date "$TMPDATE" -u +"%Y-%m-%dT%H:%M:%S.%N" | sed 's/.....$/Z/g')
+
+    LOGMSG=$(git log -1 --pretty=%s)
 
     # move to svn
     cd $SVN_FOLDER
 
-    ADD=$(svn st |grep '?\|M' |awk '{printf "%s ", $2}'); [  -z "$ADD" ] || svn add $ADD
-    REM=$(svn st |grep 'D\|!' |awk '{printf "%s ", $2}'); [  -z "$REM" ] || svn rm  $REM
+
+    # burn file if it exists....
+    if [ "$DEL" != "" ]; then
+      for i in $DEL
+      do 
+         test -f $i && svn --force rm $i
+      done
+    fi
+
+    # first round of additions....
+    [ -z "$ADD" ] || svn --force add $ADD
+    [ -z "$MOD" ] || svn --force add $MOD
 
 
-  break # just on rev for now
+    # try 2 for adding in case we missed ? files
+    ADDTRY=$(svn st . |grep "^?" |awk '{print $2}')
+    [ -z "$ADDTRY" ] || svn --force add $ADDTRY
 
-done
+    # do commit
+    svn ci -m "$LOGMSG"$'\n\n'"$HASH"
+
+    # servers pre-revprop-change
+    #  cp hooks/pre-revprop-change.tmpl pre-revprop-change; chmod +x pre-revprop-change
+    #  if [ "$ACTION" = "M" -a "$PROPNAME" = "svn:author" ]; then exit 0; fi
+    #  if [ "$ACTION" = "M" -a "$PROPNAME" = "svn:date" ]; then exit 0; fi
+    #  echo "Changing revision properties other than svn:log, svn:author and svn:date is prohibited" >&2
+
+    # change this commits author and date
+    svn propset --revprop -r HEAD svn:author "$AUTHOR"
+    svn propset --revprop -r HEAD svn:date   "$DATE"
+
+  done
 
 
 exit
