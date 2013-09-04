@@ -7,19 +7,23 @@
 
 clear; #set -x #debug
 
-REPO=svn+ssh://jdaniel@forge.erado.com/home/forge/svn/erado/saas/api/archiving
+REPO={THE_REPO_ROOT} in # svn+ssh://user@domain.com/api/svn_name
 
-echo "Burning Repo..."
-svn rm    $REPO/{trunk,tags,branches} -m "Burning..." 
+# if you want to burn and rebuild your repo 
+#echo "Burning Repo..."
+#svn rm    $REPO/{trunk,tags,branches} -m "Burning..." 
 
-echo "Rebuilding Repo...."
-svn mkdir $REPO/{trunk,tags,branches} -m "Rebuilding..." 
+#echo "Rebuilding Repo...."
+#svn mkdir $REPO/{trunk,tags,branches} -m "Rebuilding..." 
 
 # cleanup
 find -maxdepth 1 -type d ! -name '.*' |xargs rm -rf; # tmp
-URL=https://github.com/ehime/Restful-MVC-Prototype/
-SVN="${REPO}/trunk"
 
+# the Github SVN url
+URL={THE_SVN_URL} # https://github.com/user/repo/
+
+# use the trunk, branch, etc... I'm using the trunk
+SVN="${REPO}/trunk"
 
 # dirs
 SVN_FOLDER=`pwd`"/svn"
