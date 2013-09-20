@@ -40,5 +40,3 @@ qmake
 make
 
 ln -s ~/scripts/cutycapt/CutyCapt/CutyCapt /bin
-
-CutyCapt --url=http://www.erado.com --out=example.png

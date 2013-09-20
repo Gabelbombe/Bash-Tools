@@ -32,5 +32,3 @@ qmake
 make
 
 ln -s ~/scripts/cutycapt/CutyCapt/CutyCapt /bin
-
-xvfb-run --server-args="-screen 0, 1024x768x24" CutyCapt --url=http://www.google.com --out=example.png
