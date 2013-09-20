@@ -10,6 +10,10 @@ function BLUE() {
   echo -e '\n\E[37;44m'"\033[1m${1}\033[0m\n"
 }
 
+function GREEN() {
+  echo -e '\n\E[37;42m'"\033[1m${1}\033[0m\n"
+}
+
 function RED() {
   echo -e '\n\E[37;41m'"\033[1m${1}\033[0m\n"
 }
@@ -59,6 +63,18 @@ TIME=($(date +"%T"))
         \BLUE 'Starting ARC compression...'
 
         wget "${ARRAY[$ELEM]}" -r -l INF -k -p --no-check-certificate --strict-comments --warc-file="${DATE}-${ARRAY[$ELEM]}"
+
+        hash CutyCapt 2>/dev/null || { 
+          \GREEN "Attempting to install CutyCapt...."
+          
+            wget https://raw.github.com/ehime/bash-tools/master/cutycapt-installer-RHEL.sh
+            chmod +x cutycapt-installer-RHEL.sh
+
+            # run it
+            bash cutycapt-installer-RHEL.sh
+        }
+
+        CutyCapt --url="${ARRAY[$ELEM]}" --out=example.png
 
         ((USED++))
       fi
