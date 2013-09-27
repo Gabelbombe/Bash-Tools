@@ -1,4 +1,9 @@
-#!/bin/bash
+#!/bin/env bash
+# Git server setup for DEB systems
+
+# CPR : Jd Daniel :: Ehime-ken
+# MOD : 2013-09-26 @ 10:06:43
+# VER : Version 1.01
 
 # functions
 function BLUE() {
@@ -19,6 +24,7 @@ fi
 
 \BLUE "Installing GIT Core"
 
+  # install GIT base
   apt-get install -y git-core
 
 \BLUE "Adding GIT as user"
