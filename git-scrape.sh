@@ -8,9 +8,9 @@ clear; #set -x #debug
 
 function strtoupper () {
   if [ -n "$1" ]; then
-    echo "$1" | tr '[:lower:]' '[:upper:]'
+echo "$1" | tr '[:lower:]' '[:upper:]'
   else
-      cat - | tr '[:lower:]' '[:upper:]'
+cat - | tr '[:lower:]' '[:upper:]'
   fi
 }
 
@@ -31,7 +31,7 @@ declare -r SYSTEM=`strtoupper "$1"`
 declare -r FILENAME="$2"
 declare -i USED=0
 
-CDIR=`pwd`  # dir_path to local clone
+CDIR=`pwd` # dir_path to local clone
 
 DATE=($(date +"%Y-%d-%m"))
 TIME=($(date +"%T"))
@@ -40,7 +40,7 @@ TIME=($(date +"%T"))
     \RED 'File does not exist, terminating....'
     tput sgr0 # reset
     exit
-  fi
+fi
 
   \BLUE 'Reading input as array....'
 
@@ -52,46 +52,60 @@ TIME=($(date +"%T"))
     # skip comments
     [[ "$LINE" =~ ^#.*$ ]] && continue
 
-    # break into workable 
+    # break into workable
     REGEXP="^([0-9]+)?\s(.*)$"
     [[ "${LINE}" =~ $REGEXP ]] && CRONTIME="${BASH_REMATCH[1]}" && WGDOMAIN="${BASH_REMATCH[2]}"
 
-   cd $CDIR # move back to homepath
+    cd $CDIR # move back to homepath
 
     PROPERDOM=$(echo $WGDOMAIN | grep -P '(?=^.{5,254}$)(^(?:(?!\d+\.)[a-zA-Z0-9_\-]{1,63}\.?)+(?:[a-zA-Z]{2,})$)')
 
     if [ $PROPERDOM ]; then
 
-      # test the site 
+      # test the site
       curl -s --head $WGDOMAIN | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null
 
       declare -i SITEEXISTS=$?
+      declare -i DIREXISTS=0
 
       if [ '0' == $SITEEXISTS ]; then
 
         ARCDIR="web-archive/${WGDOMAIN}"
 
         echo -e "\tArchive DIR: ${ARCDIR}"
-
         if [ ! -d "${ARCDIR}" ]; then
-          declare -i DIREXISTS=0
+          DIREXISTS=0 #doesn't exsist set flag
           mkdir -p "${ARCDIR}"
         fi
 
         cd "${ARCDIR}"
 
-        if [ '0' == $DIREXISTS ]
+        echo -e "\tCreating server repository"
+
+        if [ '0' == $DIREXISTS ]; then
+          ssh git@localhost "create ${WGDOMAIN}"
+
+          git init .
+
+          # cdx call script
+          touch "${WGDOMAIN}.cdx"
+
+          # add branches
+          echo 'view archive' | while read x; do echo $( git branch "$x" & )  ; done
+
+          git add "${WGDOMAIN}.cdx" && git 
+        fi
 
         \BLUE 'Starting ARC compression...'
 
           :' C-BLOCK
-            wget "$WGDOMAIN" -r -l INF -k -p  \
-            --no-check-certificate            \
-            --strict-comments                 \
+            wget "$WGDOMAIN" -r -l INF -k -p \
+            --no-check-certificate \
+            --strict-comments \
             --warc-file="${WGDOMAIN}"
           '
 
-        hash CutyCapt 2>/dev/null || { 
+        hash CutyCapt 2>/dev/null || {
           \GREEN "Attempting to install CutyCapt...."
           
             wget "https://raw.github.com/ehime/bash-tools/master/cutycapt-installer-${SYSTEM}.sh"
@@ -108,6 +122,6 @@ TIME=($(date +"%T"))
         ((USED++))
     fi
 
-  done <$FILENAME
+done <$FILENAME
 
 \BLUE "Used: ${USED}/${#ARRAY[@]} elements...."

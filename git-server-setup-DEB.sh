@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/bash
 # Git server setup for DEB systems
 
 # CPR : Jd Daniel :: Ehime-ken
