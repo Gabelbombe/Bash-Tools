@@ -40,7 +40,7 @@ TIME=($(date +"%T"))
     \RED 'File does not exist, terminating....'
     tput sgr0 # reset
     exit
-fi
+  fi
 
   \BLUE 'Reading input as array....'
 
@@ -48,6 +48,8 @@ fi
   declare -i ELEM=0
 
   while IFS=$'\n' read -r LINE || [[ -n "$LINE" ]]; do
+
+    echo $LINE
 
     # skip comments
     [[ "$LINE" =~ ^#.*$ ]] && continue
@@ -91,7 +93,7 @@ fi
           touch "${WGDOMAIN}.cdx"
 
           # add branches
-          echo 'view archive' | while read x; do echo $( git branch "$x" & )  ; done
+          echo 'render storage' | while read x; do echo $( git branch "$x" & )  ; done
 
           git add "${WGDOMAIN}.cdx" && git 
         fi
@@ -118,10 +120,10 @@ fi
 
           \GREEN 'Capturing website image....'
           CutyCapt --url="$WGDOMAIN" --out="static-view.png"
-
         ((USED++))
+      fi
     fi
 
-done <$FILENAME
+  done <$FILENAME
 
 \BLUE "Used: ${USED}/${#ARRAY[@]} elements...."
