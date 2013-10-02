@@ -28,6 +28,7 @@ function RED() {
 
 # early var declaration
 declare -r SYSTEM=`strtoupper "$1"`
+declare -r HOSTNAME='localhost'
 declare -r FILENAME="$2"
 declare -i USED=0
 
@@ -48,8 +49,6 @@ TIME=($(date +"%T"))
   declare -i ELEM=0
 
   while IFS=$'\n' read -r LINE || [[ -n "$LINE" ]]; do
-
-    echo $LINE
 
     # skip comments
     [[ "$LINE" =~ ^#.*$ ]] && continue
@@ -82,31 +81,63 @@ TIME=($(date +"%T"))
 
         cd "${ARCDIR}"
 
-        echo -e "\tCreating server repository"
+        echo -e "\tCreating server repository\n\n"
 
         if [ '0' == $DIREXISTS ]; then
-          ssh git@localhost "create ${WGDOMAIN}"
 
-          git init .
+          ssh git@$HOSTNAME "create ${WGDOMAIN}"
+
+          git clone git@$HOSTNAME:web-archive/${WGDOMAIN}.git .
+          git commit --allow-empty -m "Initialize..."
 
           # cdx call script
           touch "${WGDOMAIN}.cdx"
 
           # add branches
-          echo 'render storage' | while read x; do echo $( git branch "$x" & )  ; done
+          echo -e "render\nstorage" | while read x; do 
+            echo $( git branch "$x" & ); 
+            echo $( git push -u origin "$x" & ); 
+          done
 
-          git add "${WGDOMAIN}.cdx" && git 
+#          ssh git@$HOSTNAME "drop ${WGDOMAIN}"
         fi
 
         \BLUE 'Starting ARC compression...'
 
-          :' C-BLOCK
-            wget "$WGDOMAIN" -r -l INF -k -p \
-            --no-check-certificate \
-            --strict-comments \
-            --warc-file="${WGDOMAIN}"
-          '
+          echo -e "render\nstorage" | while read x; do 
 
+              git checkout "$x"
+
+              case $x in
+                  $1)
+                    wget "${WGDOMAIN}" -r -l INF -k -p        \
+                      --no-check-certificate                  \
+                      --strict-comments                       \
+                      --warc-header="Operator: Web Archiver"  \
+                      --warc-file="$WGDOMAIN"                 \
+                      --warc-dedup="${WGDOMAIN}.cdx"          \
+                      --warc-cdx=on 2> session.log
+                  ;;
+
+                  $2)
+                    wget "${WGDOMAIN}" -r -l INF -p           \
+                      --no-check-certificate                  \
+                      --strict-comments                       \
+                      --warc-header="Operator: Web Archiver"  \
+                      --warc-file="$WGDOMAIN"                 \
+                      --warc-dedup="${WGDOMAIN}.cdx"          \
+                      --warc-cdx=on 2> session.log
+                  ;;
+
+                  $1|$2)
+                    git add . && git ci -m"Archived: ${DATE}"
+                    git push origin "$x"
+                  ;;
+              esac
+          done
+ 
+
+exit
         hash CutyCapt 2>/dev/null || {
           \GREEN "Attempting to install CutyCapt...."
           
