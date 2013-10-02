@@ -49,10 +49,10 @@ TIME=($(date +"%T"))
 
   while IFS=$'\n' read -r LINE || [[ -n "$LINE" ]]; do
     
-    ((ELEM++)) # counter
-
     # skip comments
     [[ "$LINE" =~ ^#.*$ ]] && continue
+
+      ((ELEM++)) # counter
 
     # break into workable
     REGEXP="^([0-9]+)?\s(.*)$"
@@ -112,7 +112,7 @@ TIME=($(date +"%T"))
 
         \BLUE 'Capturing website image....'
 
-          CutyCapt --url="${WGDOMAIN}" --out="static.png"
+   #       CutyCapt --url="${WGDOMAIN}" --out="static.png"
 
           echo -e "\tDone!"
 
@@ -130,9 +130,10 @@ TIME=($(date +"%T"))
               case $x in
                   'render' )
 
-                    wget "${WGDOMAIN}" -r -l INF -k -p        \
+                    wget "${WGDOMAIN}" -r -l INF -p           \
+                      --adjust-extension                      \
+                      --convert-links                         \
                       --no-check-certificate                  \
-                      --strict-comments                       \
                       --warc-header="Operator: Web Archiver"  \
                       --warc-file="${WGDOMAIN}"               \
                       --warc-dedup="${WGDOMAIN}.cdx"          \
@@ -141,8 +142,8 @@ TIME=($(date +"%T"))
 
                   'storage' )
                     wget "${WGDOMAIN}" -r -l INF -p           \
+                      --adjust-extension                      \
                       --no-check-certificate                  \
-                      --strict-comments                       \
                       --warc-header="Operator: Web Archiver"  \
                       --warc-file="${WGDOMAIN}"               \
                       --warc-dedup="${WGDOMAIN}.cdx"          \
@@ -160,13 +161,10 @@ TIME=($(date +"%T"))
     fi
   done <$FILENAME
 
-
   git checkout render # reset
-  git show-branch 'master' 2> /dev/null
 
-  if [ '0' -ne $? ]; then # kill our master ;)
-    git branch -D -r master
-    git push origin :master
+  if [[ `git show-branch master` ]]; then # kill our master ;)
+    git branch -D master # master is local, so no need to push refs
   fi
 
-\BLUE "Used: ${USED}/${$ELEM]} elements...."
+\BLUE "Used: ${USED}/${ELEM} elements...."
