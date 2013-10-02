@@ -112,8 +112,7 @@ TIME=($(date +"%T"))
 
         \BLUE 'Capturing website image....'
 
-   #       CutyCapt --url="${WGDOMAIN}" --out="static.png"
-
+          CutyCapt --url="${WGDOMAIN}" --out="static.png"
           echo -e "\tDone!"
 
         \BLUE 'Starting ARC compression...'
