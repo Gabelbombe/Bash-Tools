@@ -158,7 +158,15 @@ TIME=($(date +"%T"))
         ((USED++))
       fi
     fi
-
   done <$FILENAME
+
+
+  git checkout render # reset
+  git show-branch 'master' 2> /dev/null
+
+  if [ '0' -ne $? ]; then # kill our master ;)
+    git branch -D -r master
+    git push origin :master
+  fi
 
 \BLUE "Used: ${USED}/${$ELEM]} elements...."
