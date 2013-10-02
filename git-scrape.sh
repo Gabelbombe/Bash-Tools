@@ -75,69 +75,29 @@ TIME=($(date +"%T"))
 
         echo -e "\tArchive DIR: ${ARCDIR}"
         if [ ! -d "${ARCDIR}" ]; then
-          DIREXISTS=0 #doesn't exsist set flag
+          DIREXISTS=1 #doesn't exsist set flag
           mkdir -p "${ARCDIR}"
         fi
 
         cd "${ARCDIR}"
 
-        echo -e "\tCreating server repository\n\n"
+        if [ '1' == $DIREXISTS ]; then
 
-        if [ '0' == $DIREXISTS ]; then
+          echo -e "\tCreating server repository"
 
           ssh git@$HOSTNAME "create ${WGDOMAIN}"
 
           git clone git@$HOSTNAME:web-archive/${WGDOMAIN}.git .
           git commit --allow-empty -m "Initialize..."
 
-          # cdx call script
-          touch "${WGDOMAIN}.cdx"
-
           # add branches
           echo -e "render\nstorage" | while read x; do 
-            echo $( git branch "$x" & ); 
-            echo $( git push -u origin "$x" & ); 
+            git branch "$x"
+            git push -u origin "$x"
           done
 
-#          ssh git@$HOSTNAME "drop ${WGDOMAIN}"
         fi
 
-        \BLUE 'Starting ARC compression...'
-
-          echo -e "render\nstorage" | while read x; do 
-
-              git checkout "$x"
-
-              case $x in
-                  $1)
-                    wget "${WGDOMAIN}" -r -l INF -k -p        \
-                      --no-check-certificate                  \
-                      --strict-comments                       \
-                      --warc-header="Operator: Web Archiver"  \
-                      --warc-file="$WGDOMAIN"                 \
-                      --warc-dedup="${WGDOMAIN}.cdx"          \
-                      --warc-cdx=on 2> session.log
-                  ;;
-
-                  $2)
-                    wget "${WGDOMAIN}" -r -l INF -p           \
-                      --no-check-certificate                  \
-                      --strict-comments                       \
-                      --warc-header="Operator: Web Archiver"  \
-                      --warc-file="$WGDOMAIN"                 \
-                      --warc-dedup="${WGDOMAIN}.cdx"          \
-                      --warc-cdx=on 2> session.log
-                  ;;
-
-                  $1|$2)
-                    git add . && git ci -m"Archived: ${DATE}"
-                    git push origin "$x"
-                  ;;
-              esac
-          done
- 
-
-exit
         hash CutyCapt 2>/dev/null || {
           \GREEN "Attempting to install CutyCapt...."
           
@@ -149,8 +109,51 @@ exit
             bash "cutycapt-installer-${SYSTEM}.sh"
         }
 
-          \GREEN 'Capturing website image....'
-          CutyCapt --url="$WGDOMAIN" --out="static-view.png"
+        \BLUE 'Capturing website image....'
+
+          CutyCapt --url="${WGDOMAIN}" --out="static.png"
+
+          echo -e "\tDone!"
+
+        \BLUE 'Starting ARC compression...'
+
+          echo -e "render\nstorage" | while read x; do 
+
+              \GREEN "Fetching ${x}"
+
+              git checkout "$x"
+              git pull origin "$x"
+
+              touch "${WGDOMAIN}.cdx"
+
+              case $x in
+                  'render' )
+
+                    wget "${WGDOMAIN}" -r -l INF -k -p        \
+                      --no-check-certificate                  \
+                      --strict-comments                       \
+                      --warc-header="Operator: Web Archiver"  \
+                      --warc-file="${WGDOMAIN}"               \
+                      --warc-dedup="${WGDOMAIN}.cdx"          \
+                      --warc-cdx=on 2> session.log
+                  ;;
+
+                  'storage' )
+                    wget "${WGDOMAIN}" -r -l INF -p           \
+                      --no-check-certificate                  \
+                      --strict-comments                       \
+                      --warc-header="Operator: Web Archiver"  \
+                      --warc-file="${WGDOMAIN}"               \
+                      --warc-dedup="${WGDOMAIN}.cdx"          \
+                      --warc-cdx=on 2> session.log
+                  ;;
+              esac
+
+              echo; git add .
+              echo; git commit -am "Archiving ${x}: ${DATE} @ ${TIME}"
+              echo; git push origin "$x"
+
+          done
         ((USED++))
       fi
     fi
