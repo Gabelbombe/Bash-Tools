@@ -2,7 +2,7 @@
 # WARC File assembler
  
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2013-19-09 @ 12:22:43
+# MOD : 2013-10-02 @ 11:36:59
 
 clear; #set -x #debug
 
@@ -45,10 +45,11 @@ TIME=($(date +"%T"))
 
   \BLUE 'Reading input as array....'
 
-  declare -a ARRAY
   declare -i ELEM=0
 
   while IFS=$'\n' read -r LINE || [[ -n "$LINE" ]]; do
+    
+    ((ELEM++)) # counter
 
     # skip comments
     [[ "$LINE" =~ ^#.*$ ]] && continue
@@ -160,4 +161,4 @@ TIME=($(date +"%T"))
 
   done <$FILENAME
 
-\BLUE "Used: ${USED}/${#ARRAY[@]} elements...."
+\BLUE "Used: ${USED}/${$ELEM]} elements...."
