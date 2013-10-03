@@ -48,7 +48,7 @@ TIME=($(date +"%T"))
   declare -i ELEM=0
 
   while IFS=$'\n' read -r LINE || [[ -n "$LINE" ]]; do
-    
+
     # skip comments
     [[ "$LINE" =~ ^#.*$ ]] && continue
 
@@ -56,6 +56,7 @@ TIME=($(date +"%T"))
 
     # break into workable
     REGEXP="^([0-9]+)?\s(.*)$"
+
     [[ "${LINE}" =~ $REGEXP ]] && CRONTIME="${BASH_REMATCH[1]}" && WGDOMAIN="${BASH_REMATCH[2]}"
 
     cd $CDIR # move back to homepath
@@ -67,8 +68,8 @@ TIME=($(date +"%T"))
       # test the site
       curl -s --head $WGDOMAIN | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null
 
-      declare -i SITEEXISTS=$?
-      declare -i DIREXISTS=0
+      SITEEXISTS=$?
+      DIREXISTS=0
 
       if [ '0' == $SITEEXISTS ]; then
 
@@ -86,22 +87,23 @@ TIME=($(date +"%T"))
 
           echo -e "\tCreating server repository"
 
-          ssh git@$HOSTNAME "create ${WGDOMAIN}"
+          # ssh reads from standard input, therefore it eats all our remaining lines.
+          # To fix this we can just connect its standard input to nowhere....
+          ssh git@$HOSTNAME "create ${WGDOMAIN}" < /dev/null
 
           git clone git@$HOSTNAME:web-archive/${WGDOMAIN}.git .
           git commit --allow-empty -m "Initialize..."
 
           # add branches
-          echo -e "render\nstorage" | while read x; do 
+          echo -e "render\nstorage" | while read x; do
             git branch "$x"
             git push -u origin "$x"
           done
-
         fi
 
-        hash CutyCapt 2>/dev/null || {
+        hash CutyCapt 2> /dev/null || {
           \GREEN "Attempting to install CutyCapt...."
-          
+
             wget "https://raw.github.com/ehime/bash-tools/master/cutycapt-installer-${SYSTEM}.sh"
 
             chmod +x "cutycapt-installer-${SYSTEM}.sh"
@@ -112,12 +114,16 @@ TIME=($(date +"%T"))
 
         \BLUE 'Capturing website image....'
 
-          CutyCapt --url="${WGDOMAIN}" --out="static.png"
-          echo -e "\tDone!"
+          CutyCapt --url="http://${WGDOMAIN}"   \
+            --out="static.png"                  \
+            --max-wait=12500                    \
+            --insecure
+
+        echo -e "\tDone!"
 
         \BLUE 'Starting ARC compression...'
 
-          echo -e "render\nstorage" | while read x; do 
+          echo -e "render\nstorage" | while read x; do
 
               \GREEN "Fetching ${x}"
 
