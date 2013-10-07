@@ -17,9 +17,9 @@ for (( i=0 ; i<${#array[@]} ; i++ )); do
 		# +'%-' will elmitnate leading zeros
 		if [ $((24/$i)) -eq $(date -r ${stamp} +%-H) ]; then 
 
-			ttime=$((24/$sepr)) + $(date -r ${stamp} +%-H)
+			utime=$((24/$sepr)) + $(date -r ${stamp} +%-H)
 
-			touch -d "+${ttime} hour" ${stamp} 
+			touch -d "+${utime} hour" ${stamp} 
 
 			echo "Added ${addr}....\n"
 			echo "${addr}" >> data.csv
