@@ -70,7 +70,7 @@ echo -e "Done!"
 
 \BLUE "Creating Interactive GIT-Shell"
 
-  mkdir -p /~git/git-shell-commands
+  mkdir -p ~git/git-shell-commands
 
   # ~git/git-shell-commands should exist and have read and execute access.
   git clone https://github.com/ehime/git-commands.git ~git/git-shell-commands
