@@ -39,13 +39,12 @@ for (( i=0 ; i<${#array[@]} ; i++ )); do # iterate array parts
 	declare -i base=0 # declare base enumerator
 
 	for i in $(seq 1 $sequence); do # use runtime as range()
-
-		base=$(($base + $sequence))
+		base=$(($base + $sequence)) # rebuild the sequence base as incrementor
 
 		# cannot touch -t $(date +"%Y%m%d2400") {file} only 00:00 tmk
 	    [ $base -eq 24 ] && mill=0 || mill=$base
 
-		n=`printf %02d $mill`  		# pad items with leading 0
+		n=`printf %02d $mill` # pad items with leading 0
 
 		# if file doesn't exist set tracker time to current time
 		[ ! -f $tracker ] && touch -t $(date +"%Y%m%d$n%M") ${tracker}
@@ -63,8 +62,6 @@ for (( i=0 ; i<${#array[@]} ; i++ )); do # iterate array parts
 		else
 			echo -e "Doesn't exist: $(date -r ${tracker} +%-H) / $((24/$i)) \t ${tracker}" # got nothin'
 		fi
-
-
 	done
 done
 
