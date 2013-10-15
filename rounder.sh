@@ -24,19 +24,20 @@ clear; #set -x # debug
 
 [ ! -d 'trackers' ] && mkdir 'trackers' # !is_dir(trackers), mkdir trackers
 
-for (( i=0 ; i<${#array[@]} ; i++ )); do # iterate array parts
+for (( c=0 ; c<${#array[@]} ; c++ )); do # iterate array parts
+
+	declare -i base=0 # declare base enumerator
 
 	# use only ODD parts of the array, we will use address' out 
 	# of sequence, poss integrety issue if some dumb ass inputs
 	# incorrectly on setup, poss fake assoc arrays? Fix later..
 	[ $((($i-1) % 2)) -eq 0 ] && continue 
 
+	address="${array[$c-1]}" # set address for future
+
 	# set current tracker file
-	tracker="trackers/${array[$i-1]}.stamp"
-
-	sequence=$((24/${array[$i]})) # iteration amount until goal is met
-
-	declare -i base=0 # declare base enumerator
+	tracker="trackers/${address}.stamp"
+	sequence=$((24/${array[$c]})) # iteration amount until goal is met
 
 	for i in $(seq 1 $sequence); do # use runtime as range()
 		base=$(($base + $sequence)) # rebuild the sequence base as incrementor
@@ -57,10 +58,9 @@ for (( i=0 ; i<${#array[@]} ; i++ )); do # iterate array parts
 			# set tracker forward to next runtime
 			touch -t $(date +"%Y%m%d$n%M") ${tracker}
 
-			echo "${array[$i-1]}....\n" 		# echo that we did something, anything....
-			echo "${array[$i-1]}" >> $outfile 	# append this address to file for scraper 
-		else
-			echo -e "Doesn't exist: $(date -r ${tracker} +%-H) / $((24/$i)) \t ${tracker}" # got nothin'
+			echo -e "Capturing ${address}....\n" 	# echo that we did something, anything....
+			echo "${address}" >> $outfile 			# append this address to file for scraper 
+
 		fi
 	done
 done
