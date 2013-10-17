@@ -42,7 +42,7 @@ service mongodb restart
   PHP Installation
 END
 
-hash foo 2>/dev/null || {
+hash pecl 2>/dev/null || {
   # test or make pecl
   packages=(make php5-dev php-pear libcurl3-openssl-dev)
 
