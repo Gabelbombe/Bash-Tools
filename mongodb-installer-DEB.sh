@@ -42,8 +42,19 @@ service mongodb restart
   PHP Installation
 END
 
-# test or make pecl
-pecl install mongo
+hash foo 2>/dev/null || {
+  # test or make pecl
+  packages=(make php5-dev php-pear libcurl3-openssl-dev)
+
+  for package in "${packages[@]}"; do
+
+    # if missing dependancies $package, prep for installation...
+    [ -z `dpkg --get-selections |awk '{print $1}' |grep -x $package` ] && apt-get install -y $package
+
+  done
+
+  pecl install mongo
+}
 
 # test mongodb's so was installed correctly, AKA php_dir was not declared
 INI=`php -i |grep 'Loaded Configuration File' |awk '{print $5}'` 
@@ -58,7 +69,7 @@ php -r 'phpinfo();' |grep -q 'mongo'
 if [ $? == 0 ]; then
   echo -e '\n\E[37;42m'"\033[1mInstallation successful!\033[0m\n"
 else
-    echo -e '\n\E[37;41m'"\033[1mShit broke somewhere....\033[0m\n"
+    echo -e '\n\E[37;41m'"\033[1mShit broke somewhere..\033[0m\n"
 fi
 
-exit 1
+exit 0
