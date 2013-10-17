@@ -2,8 +2,8 @@
 # MongoDB installer for PHP && DEB based servers
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2013-10-17 @ 13:03:31
-# VER : Version 1.03
+# MOD : 2013-10-17 @ 14:02:46
+# VER : Version 1.04
 
 clear
 stty erase '^?'
@@ -53,7 +53,8 @@ hash foo 2>/dev/null || {
 
   done
 
-  pecl install mongo
+  pecl install mongo  # is now available as a package
+  apache2ctl graceful # graceful restart
 }
 
 # test mongodb's so was installed correctly, AKA php_dir was not declared
@@ -62,14 +63,12 @@ if [ -z `cat $INI |grep 'extension="mongo.so"'` ]; then
   echo -e '\n# MongoDB Installation SO\nextension="mongo.so"' >> $INI
 fi
 
-# graceful restart
-apache2ctl graceful
+apache2ctl graceful # graceful restart
 
-php -r 'phpinfo();' |grep -q 'mongo'
-if [ $? == 0 ]; then
-  echo -e '\n\E[37;42m'"\033[1mInstallation successful!\033[0m\n"
-else
-    echo -e '\n\E[37;41m'"\033[1mShit broke somewhere..\033[0m\n"
-fi
+php -r 'phpinfo();' |grep -q 'mongo' # re stat, and end game...
+
+# output
+[ $? == 0 ] && echo -e '\n\E[37;42m'"\033[1mInstallation successful!\033[0m\n" \
+            || echo -e '\n\E[37;41m'"\033[1mShit broke somewhere..\033[0m\n"
 
 exit 0
