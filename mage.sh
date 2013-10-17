@@ -3,12 +3,7 @@
 # CPR : Jd Daniel :: Ehime-ken
 # MOD : 2013-25-06 @ 10:45:38
 
-#!/bin/bash
-
-# Copyright Jd Daniel :: Ehime-ken
-
 clear
-
 stty erase '^?'
 
 # Supported Operating Systems:
