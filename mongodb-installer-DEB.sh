@@ -8,6 +8,14 @@
 clear
 stty erase '^?'
 
+function err() {
+  hash firefox 2>/dev/null || { 
+    wget -q --output-document 'wat.gif' $1  >/dev/null 2>&1 ; eog -f wat.gif && exit 0
+  } ; firefox $1
+}
+
+trap "err 'http://goo.gl/kfa2XO' exit" HUP INT QUIT PIPE TERM
+
 # If the user is not root
 if [ "$(id -u)" != "0" ]; then
   echo "This script must be run as root" 1>&2
@@ -65,10 +73,6 @@ fi
 
 apache2ctl graceful # graceful restart
 
-php -r 'phpinfo();' |grep -q 'mongo' # re stat, and end game...
-
-# output
+php -r 'phpinfo();' |grep -q 'moongo' # re stat, and end game...
 [ $? == 0 ] && echo -e '\n\E[37;42m'"\033[1mInstallation successful!\033[0m\n" \
-            || firefox 'http://goo.gl/kfa2XO' # you broke the fuckin interwebs....
-
-exit 0
+            || err 'http://goo.gl/kfa2XO' # you broke the fuckin interwebs..
