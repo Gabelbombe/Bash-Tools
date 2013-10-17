@@ -1,4 +1,12 @@
 #!/bin/bash
+# MongoDB installer for PHP && DEB based servers
+
+# CPR : Jd Daniel :: Ehime-ken
+# MOD : 2013-10-17 @ 13:03:31
+# VER : Version 1.03
+
+clear
+stty erase '^?'
 
 # If the user is not root
 if [ "$(id -u)" != "0" ]; then
@@ -30,15 +38,27 @@ END
 
 service mongodb restart
 
-# PHP Installation
+: <<'END'
+  PHP Installation
+END
 
+# test or make pecl
 pecl install mongo
 
 # test mongodb's so was installed correctly, AKA php_dir was not declared
 INI=`php -i |grep 'Loaded Configuration File' |awk '{print $5}'` 
 if [ -z `cat $INI |grep 'extension="mongo.so"'` ]; then
-  echo -e "\n# MongoDB Installation SO\nextension="mongo.so" >> $INI
+  echo -e '\n# MongoDB Installation SO\nextension="mongo.so"' >> $INI
 fi
 
 # graceful restart
-apache2ctl graceful && exit 1
+apache2ctl graceful
+
+php -r 'phpinfo();' |grep -q 'mongo'
+if [ $? == 0 ]; then
+  echo -e '\n\E[37;42m'"\033[1mInstallation successful!\033[0m\n"
+else
+    echo -e '\n\E[37;41m'"\033[1mShit broke somewhere....\033[0m\n"
+fi
+
+exit 1
