@@ -43,8 +43,8 @@ service mongodb restart
 END
 
 hash pecl 2>/dev/null || {
-  # test or make pecl
-  packages=(make php5-dev php-pear libcurl3-openssl-dev)
+
+  packages=(make php5-dev php-pear libcurl3-openssl-dev) # test deps to make pecl
 
   for package in "${packages[@]}"; do
 
@@ -69,6 +69,6 @@ php -r 'phpinfo();' |grep -q 'mongo' # re stat, and end game...
 
 # output
 [ $? == 0 ] && echo -e '\n\E[37;42m'"\033[1mInstallation successful!\033[0m\n" \
-            || echo -e '\n\E[37;41m'"\033[1mShit broke somewhere..\033[0m\n"
+            || firefox 'http://goo.gl/kfa2XO' # you broke the fuckin interwebs....
 
 exit 0
