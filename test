@@ -1,8 +1,0 @@
-function err() {
-	hash firefox 2>/dev/null || { 
-		wget -q --output-document 'wat.gif' $1  >/dev/null 2>&1 ; eog -f wat.gif && exit 0
-	} ; firefox $1
-}
-
-trap "err 'http://goo.gl/kfa2XO' exit" HUP INT QUIT PIPE TERM
-sleep 10
