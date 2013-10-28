@@ -2,8 +2,8 @@
 # MongoDB installer for PHP && DEB based servers
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2013-10-17 @ 14:02:46
-# VER : Version 1.04
+# MOD : 2013-10-28 @ 09:40:20
+# VER : Version 1.05.1
 
 clear
 stty erase '^?'
