@@ -61,18 +61,22 @@ hash pecl 2>/dev/null || {
 
   done
 
-  pecl install mongo  # is now available as a package
+  pecl install mongo              # is now available as a package
+  apt-get install -y php5-mongo   # ubuntu 13.10 fix
+
   apache2ctl graceful # graceful restart
 }
 
 # test mongodb's so was installed correctly, AKA php_dir was not declared
 INI=`php -i |grep 'Loaded Configuration File' |awk '{print $5}'` 
 if [ -z `cat $INI |grep 'extension="mongo.so"'` ]; then
-  echo -e '\n# MongoDB Installation SO\nextension="mongo.so"' >> $INI
+  echo -e '\n[MongoDB]\n\n; MongoDB Installation SO\nextension="mongo.so"' >> $INI
 fi
+
+mkdir -p /data/db # create datadir for MongoDB
 
 apache2ctl graceful # graceful restart
 
-php -r 'phpinfo();' |grep -q 'moongo' # re stat, and end game...
-[ $? == 0 ] && echo -e '\n\E[37;42m'"\033[1mInstallation successful!\033[0m\n" \
+php -r 'phpinfo();' |grep -q 'mongo' # re stat, and end game...
+[ $? == 0 ] && echo -e '\n\E[37;42m'"\033[1m\t\tInstallation successful!\t\t\033[0m" '\n\E[37;42m'"\033[1m\t\t    $ sudo mongod\t\t\t\033[0m\n" \
             || err 'http://goo.gl/kfa2XO' # you broke the fuckin interwebs..
