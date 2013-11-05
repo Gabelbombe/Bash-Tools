@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/bash
 # Youtube to MP3 Bash Script
  
 # CPR : Jd Daniel :: Ehime-ken
