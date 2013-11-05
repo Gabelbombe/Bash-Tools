@@ -3,15 +3,14 @@
 
 # CPR : Jd Daniel :: Ehime-ken
 # MOD : 2013-11-05 @ 11:14:36
+# VER : Version 1
+
 # REF : http://pastebin.com/QHQeNRZM
 
-echo "[i] soundcloud.com stream stripper by Ehime-ken";
+echo "[i] SoundCloud.com stream stripper by Ehime-ken";
  
 if [ -z "$1" ]; then
-        echo "";
-        echo "[i] Usage: `basename $0` http://soundcloud.com/link_with_tracks_on_page";
-        echo "";
-        exit
+    echo -e "\n[i] Usage: `basename $0` http://soundcloud.com/link_with_tracks_on_page\n" ; exit
 fi
 
 pages=`curl -L -s --user-agent 'Mozilla/5.0' "$1" | tr '"' "\n" | grep "tracks?" | grep "page=" | awk -F= '{print $NF}' | sort -nu | tail -n 1`
