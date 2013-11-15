@@ -57,7 +57,7 @@ fi
   ssh-keygen -f ~/.ssh/git.dsa -t dsa -N ''
 
   # create a root key
-  cat ~/.ssh/git.dsa.pub >> /home/git/.ssh/authorized_keys
+  cat ~/.ssh/git_dsa.pub >> /home/git/.ssh/authorized_keys
 
 echo -e "Done!" 
 
