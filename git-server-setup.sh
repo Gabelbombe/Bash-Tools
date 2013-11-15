@@ -35,7 +35,7 @@ fi
 
 \BLUE "Adding GIT as user"
 
-  [ -d "/home/git" ] || mkdir -p /home/git/data
+  [ -d "/home/git" ] || mkdir -p /home/git
   useradd                           \
     --create-home                   \
     --skel      /dev/null           \
@@ -86,7 +86,7 @@ echo -e "Done!"
 
   chown -R git:git ~git
 
-# Prevent full login for security reasons
+  # Prevent full login for security reasons
   chsh -s /usr/bin/git-shell git
 
 echo -e "Locked."
