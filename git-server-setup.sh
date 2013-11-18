@@ -101,6 +101,7 @@ echo -e "Locked."
 
 \BLUE "Setting up GIT user UID and Email"
 
+  # use (unique) system variables to start this
   git config --global user.name \""$(echo `cat /sys/class/dmi/id/product_uuid`"-"`hostname`)"\"
   git config --global user.email \"`whoami`@`hostname`\"
 
