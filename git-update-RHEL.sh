@@ -3,7 +3,9 @@
 
 # CPR : Jd Daniel :: Ehime-ken
 # MOD : 2013-11-18 @ 09:28:49
-# VER : Version 1.0
+
+# REF : http://goo.gl/ditKWu
+# VER : Version 1.1
 
 # ROOT check
 if [[ $EUID -ne 0 ]]; then
