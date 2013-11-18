@@ -2,8 +2,8 @@
 # Git server setup for DEB/RHEL systems
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2013-11-18 @ 08:34:36
-# VER : Version 1.2.2
+# MOD : 2013-11-18 @ 10:49:58
+# VER : Version 1.3.0
 
 # functions
 function BLUE() 
@@ -91,6 +91,18 @@ echo -e "Done!"
   chsh -s /usr/bin/git-shell git
 
 echo -e "Locked."
+
+\BLUE "GIT testing version"
+
+  cd /tmp && wget https://raw.github.com/ehime/bash-tools/master/git-update-RHEL.sh
+  chmod +x git-update-RHEL.sh 
+
+  bash git-update-RHEL.sh # run it
+
+\BLUE "Setting up GIT user UID and Email"
+
+  git config --global user.name \""$(echo `cat /sys/class/dmi/id/product_uuid`"-"`hostname`)"\"
+  git config --global user.email \"`whoami`@`hostname`\"
 
 \GREEN "Finished....."
 
