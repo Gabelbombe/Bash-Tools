@@ -18,4 +18,5 @@ cd /usr/local/src
 git clone git://git.kernel.org/pub/scm/git/git.git && cd git
 make && make prefix=/usr install
 
-git --ve
+git --version
+exit 0
