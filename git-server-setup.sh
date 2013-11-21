@@ -58,7 +58,7 @@ fi
   touch /home/git/.ssh/authorized_keys
   chmod 0600 /home/git/.ssh/authorized_keys
 
-  ssh-keygen -f ~/.ssh/git.dsa -t dsa -N ''
+  ssh-keygen -f ~/.ssh/git_dsa -t dsa -N ''
 
   # create a root key
   cat ~/.ssh/git_dsa.pub >> /home/git/.ssh/authorized_keys
@@ -84,9 +84,6 @@ echo -e "Done!"
   # change ownership from root
   chown -R git:git /home/git
 
-  # add to shells
-  echo '/usr/bin/git-shell' >> /etc/shells
-
   # Prevent full login for security reasons
   chsh -s /usr/bin/git-shell git
 
@@ -94,11 +91,16 @@ echo -e "Locked."
 
 \BLUE "GIT testing version"
 
+  majmin=$(git --version | awk '{ print $3 }' | awk -F'.' '{print $2$3}') 
+  if [ $major < 74 ]; then
+
   cd /tmp && wget https://raw.github.com/ehime/bash-tools/master/git-update-RHEL.sh
   chmod +x git-update-RHEL.sh 
 
   bash git-update-RHEL.sh # run it
-
+  else
+    \GREEN 'Versions ok..'
+  fi
 \BLUE "Setting up GIT user UID and Email"
 
   # use (unique) system variables to start this
