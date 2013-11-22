@@ -14,7 +14,7 @@ while IFS=$'\n' read -r address || [[ -n "$address" ]]; do
 
     resp=$(echo ^D | openssl s_client -tls1 -connect  ${address}:${port} 2>&1 >/dev/null | grep ':error:' | awk -F':' '{print $6}')
     [ '' == "${resp}" ] && { protocol="https://${address}" ; resp='Connected...' ; } \
-                        || { protocol="https://${address}" ; resp="err: ${resp}" ; }
+                        || { protocol="http://${address}"  ; resp="err: ${resp}"  ; }
 
     echo -e "Attempt:  ${address}"
     echo -e "Connects: ${protocol}"
