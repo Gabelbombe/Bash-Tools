@@ -55,4 +55,4 @@ patch -p0 -i CutyCapt.patch
 qmake
 make
 
-ln -s ~/scripts/cutycapt/CutyCapt/CutyCapt /bin
+sudo ln -s ~/scripts/cutycapt/CutyCapt/CutyCapt /bin
