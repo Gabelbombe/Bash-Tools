@@ -25,11 +25,11 @@ declare -r net_dir='/etc/NetworkManager/system-connections'
 
 function list ()
 {
-  cd $net_dir
+  cd "${net_dir}"
 
-  # simple ls
-  export files=$(ls)
-  export count=$(ls |wc -l)
+    export count=$(ls |wc -l) # used in drop function
+
+  files=$(ls) # simple ls
 
   echo -e "\n\tFound ${count} wireless connections"
 
@@ -48,7 +48,7 @@ function drop ()
 
     # strtolower, and rm
     if [ 'y' == "$(echo $resp | awk '{print tolower($0)}')" ]; then
-      echo rm -f ${net_dir}/${OPTARG}
+      rm -f ${net_dir}/${OPTARG}
     fi
 }
 
@@ -64,8 +64,6 @@ function flush ()
     if [ 'y' == "$(echo $resp | awk '{print tolower($0)}')" ]; then
       rm -f ${net_dir}/*
     fi
-
-  exit 0
 }
 
 function version ()
@@ -112,7 +110,7 @@ while getopts ':ld:f-:' OPT; do
 
        esac
    ;;
-    : ) echo -e "\n\tMissing option argument for -$OPTARG" >&2; exit 1;;
+    : ) echo -e "\n\tMissing option argument for -$OPTARG" >&2;               exit 1;;
     * ) echo -e "\n\tUnknown flag supplied ${OPTARG}\n\tTry wireless --help"; exit 1;;
   esac
 done
