@@ -37,6 +37,8 @@ for (( page=1; page <= $pages; page++ )); do
             echo "[!] No songs found at $1/tracks?page=$page." && exit
     fi
 
+    cd /tmp
+
     echo "[+] Downloading $songcount songs from page $page..."
 
     for (( songid=1; songid <= $songcount; songid++ )); do
@@ -45,6 +47,8 @@ for (( page=1; page <= $pages; page++ )); do
         echo "[-] Downloading $title..."
         url=`echo "$songs" | sed -n "$songid"p`
         curl -C - -s -L --user-agent 'Mozilla/5.0' -o "$title.mp3" $url;
+
+        [ -d "~/Music" ] && mv "$title.mp3" ~/Music 
     done
 done
 
