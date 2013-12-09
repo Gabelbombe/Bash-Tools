@@ -3,7 +3,7 @@
 # Make sure to place script in /usr/local/bin 
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2013-12-09 @ 09:31:00
+# MOD : 2013-12-09 @ 12:27:02
 
 # INP : $ wireless -{flag} {arg}
 
@@ -19,7 +19,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 
-declare -r VERSION='1.1b'
+declare -r VERSION='1.2b'
 declare -r net_dir='/etc/NetworkManager/system-connections'
 
 
