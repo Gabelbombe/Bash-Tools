@@ -1,6 +1,10 @@
 #!/bin/bash
+# CPR : Jd Daniel :: Ehime-ken
+# MOD : 2014-04-02 @ 15:52:10
+# VER : 1.1b
 
-# ROOT check
+
+## ROOT check
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as su" 1>&2 ; exit 1
 fi
