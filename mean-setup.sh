@@ -83,7 +83,7 @@ fi
     ## Install precursers
     sudo apt-get install -y build-essential openssl libssl-dev curl
 
-    [ ! -z "$(which it)" ] || apt-get isntall -y git git-core
+    [ ! -z "$(which git)" ] || apt-get install -y git git-core
 
     ## Get Node Version Manager
     git clone git://github.com/creationix/nvm.git ~/.nvm
