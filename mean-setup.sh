@@ -107,6 +107,14 @@ fi
 ####################################
 ####################################
 
+    ## cont?
+    read -p "Have repos to clone? [Y/n]: " repo
+
+
+        ## stop... in the naaaame of.... wait... what the fuck....
+        [ 'y' == "$(echo $repo | awk '{print tolower($0)}')" ] || exit 1
+
+
     ## Get user creds and stuff    
     read -p "Enter STASH Username: " user
     read -p "Enter STASH Password: " pass
