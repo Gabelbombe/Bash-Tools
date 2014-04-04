@@ -3,8 +3,6 @@
 # MOD : 2014-04-02 @ 15:52:10
 # VER : 1.1b
 
-server='stash.corbis.com/scm/bnr/'
-
 ## ROOT check
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as su" 1>&2 ; exit 1
@@ -114,6 +112,14 @@ fi
         ## stop... in the naaaame of.... wait... what the fuck....
         [ 'y' == "$(echo $repo | awk '{print tolower($0)}')" ] || exit 1
 
+
+    read -p "What's the server [Aka: foo.com/somerepo]: " server
+
+    ## broke the internet
+    [ ! -z "$(ping -c 1 -q ${server} 2>&1 |grep 'unknown')" ] || {
+        echo 'Uh... no.' ;
+        exit 1 ;
+    }
 
     ## Get user creds and stuff    
     read -p "Enter STASH Username: " user
