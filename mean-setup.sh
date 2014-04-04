@@ -3,6 +3,7 @@
 # MOD : 2014-04-02 @ 15:52:10
 # VER : 1.1b
 
+server='stash.corbis.com/scm/bnr/'
 
 ## ROOT check
 if [[ $EUID -ne 0 ]]; then
@@ -129,6 +130,6 @@ fi
 
     ## Do it
     for i in "${repos[@]}"; do
-        repo=$(echo "git clone 'https://${user}:${pass}@stash.corbis.com/scm/bnr/$(echo $i | awk '{print tolower($0)}').git' $i/")
+        repo=$(echo "git clone 'https://${user}:${pass}@${server}/$(echo $i | awk '{print tolower($0)}').git' $i/")
         eval "$(echo $repo)"
     done

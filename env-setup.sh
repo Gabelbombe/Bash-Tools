@@ -1,7 +1,7 @@
 #!/bin/bash
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2014-04-02 @ 15:52:10
-# VER : 1.1b
+# MOD : 2014-04-04 @ 13:13:29
+# VER : 1.0
 #
 # My typical ENV Setup for DEB based systems...
 
@@ -9,6 +9,7 @@
 if [[ $EUID -ne 0 ]]; then
   echo "This script must be run as su" 1>&2 ; exit 1
 fi
+
 
 ## MariaDB
 
@@ -28,6 +29,7 @@ fi
 
   # check version
   mysql -v
+
 
 ## Apache
 
@@ -79,6 +81,7 @@ fi
 
   # check version
   apache2 -v
+
 
 ## PHP 5.5
 
