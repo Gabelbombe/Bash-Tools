@@ -1,5 +1,5 @@
 #!/bin/bash
-# CPR : Jd Daniel :: 
+# CPR : Jd Daniel :: http://goo.gl/Yejho4
 # MOD : 2014-04-07 @ 12:09:01
 # VER : 0.2a
 
