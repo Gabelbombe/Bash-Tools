@@ -18,4 +18,5 @@ read -p "Directory correct [Y/n]: " dir
 }
 
 rm -rf *    && git reset --hard HEAD
-npm install && grunt bower:install
+npm install && bower install
+

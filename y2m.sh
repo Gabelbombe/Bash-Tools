@@ -34,12 +34,14 @@ while getopts 'v:d:-:' OPT; do
   esac
 done
 
+cd /tmp
+
 # if short order (y2m http://addy.com)
 if [ -e $address ]; then
     address=$1
 
     # default to /home/{user}/Music
-    dir='~/Music/'  
+    dir="/home/${USER}/Music/"
 fi
 
 regex='v=(.*)'
@@ -50,8 +52,9 @@ if [[ $address =~ $regex ]]; then
     video_id=$(echo $video_id | cut -d'&' -f1)
 
     # adding thumbnail to the MP3
-    thumb=$(youtube-dl --write-thumbnail $address | grep "to:.*" | awk '{for(i=6;i<=NF;i++) printf $i" "}' | cut -d'.' --complement -f2-)
-    rm "$thumb".webm # not needed for thumbstamp
+    thumb="$(youtube-dl --write-thumbnail $address |grep "to:.*" |awk '{for(i=6;i<=NF;i++) printf $i" "}' |cut -d'.' --complement -f2-)"
+
+    rm -f "$thumb".{webm,mp4} # not needed for thumbstamp
 
     video_title="$(youtube-dl --get-title $address)"
 
@@ -61,10 +64,10 @@ if [[ $address =~ $regex ]]; then
     ffmpeg -i "$video_title".flv -i "$thumb".jpg -acodec libmp3lame -ac 2 -ab 320k -vn -y "$video_title".mp3
 
         # untested
-       if [[ $dir ]]; then
+       if [ -z "$dir" ]; then
          if [[ ! -d $dir ]]; then
            echo "Creating directory $dir"
-           mkdir -p $dir
+           echo mkdir -p $dir
          fi
        fi
 
