@@ -51,17 +51,41 @@ if [[ $address =~ $regex ]]; then
     video_id=${BASH_REMATCH[1]}
     video_id=$(echo $video_id | cut -d'&' -f1)
 
+  FILENAME=$(basename "$FILEPATH")
+  EXTENSION="${FILENAME##*.}"
+
+  if [ $video_id != "*" ]
+  then
+    DATA=`curl -s https://gdata.youtube.com/feeds/api/videos/$video_id?v=2`
+    PUBLISHED=`echo $DATA | php -r 'print simplexml_load_file("php://stdin")->published;' | sed 's/\..*Z/Z/'`
+    AUTHOR=`echo $DATA | php -r 'print simplexml_load_file("php://stdin")->author->name;'`
+    TITLE=`echo $DATA | php -r '$x = simplexml_load_file("php://stdin"); $ns = $x->getNameSpaces(true); $m = $x->children($ns["media"]); print $m->group->title;'`
+    DESCRIPTION=`echo $DATA | php -r '$x = simplexml_load_file("php://stdin"); $ns = $x->getNameSpaces(true); $m = $x->children($ns["media"]); print $m->group->description;'`
+    COMMENT="http://www.youtube.com/watch?v=$YOUTUBE_ID"
+    ALBUM=$AUTHOR
+
+    if [ "$1" ]
+    then
+      TITLE="$AUTHOR: $TITLE"
+      AUTHOR=$1
+      ALBUM=$1
+    fi
+
+echo -e "published: $PUBLISHED \n author: $AUTHOR  \n title: $TITLE \n description: $DESCRIPTION \n $COMMENT"
+
+exit
+fi
     # adding thumbnail to the MP3
     thumb="$(youtube-dl --write-thumbnail $address |grep "to:.*" |awk '{for(i=6;i<=NF;i++) printf $i" "}' |cut -d'.' --complement -f2-)"
 
-    rm -f "$thumb".{webm,mp4} # not needed for thumbstamp
+#    rm -f "$thumb".{webm,mp4} # not needed for thumbstamp
 
     video_title="$(youtube-dl --get-title $address)"
 
         # download the FLV stream
         youtube-dl -o "$video_title".flv $address
 
-    ffmpeg -i "$video_title".flv -i "$thumb".jpg -acodec libmp3lame -ac 2 -ab 320k -vn -y "$video_title".mp3
+    ffmpeg -i "$video_title".flv -i "$thumb".jpg -metadata title="my title" -acodec libmp3lame -ac 2 -ab 320k -vn -y "$video_title".mp3
 
         # untested
        if [ -z "$dir" ]; then
@@ -71,8 +95,8 @@ if [[ $address =~ $regex ]]; then
          fi
        fi
 
-    mv "$video_title".mp3 $dir
-    rm "$video_title".flv "$thumb".jpg
+    cp "$video_title".mp3 $dir
+#    rm "$video_title".flv "$thumb".jpg
 else
     echo "Sorry but you seemed to broken the interwebs."
 fi
