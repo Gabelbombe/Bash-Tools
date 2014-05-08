@@ -37,7 +37,7 @@ fi
 \BLUE "Adding GIT as user"
 
   # if user already exists, warn and exit
-  [[ $(getent passwd git) ]] && echo 'User exists...' ; exit 1
+  [[ $(getent passwd git) ]] || echo 'User exists...' ; exit 1
 
   # create user and set dir skeleton
   [ -d "/home/git" ] || useradd     \
@@ -45,7 +45,7 @@ fi
     --skel      /dev/null           \
     --home-dir  /home/git           \
     --shell     /bin/bash           \
-    --comment   'Web Archive VCS'   \
+    --comment   'Local Archiver'    \
   git
 
   chmod -R 0750 /home/git

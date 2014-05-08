@@ -24,6 +24,17 @@ SCRIPT="ffmpegupdate.sh"
 CONF="/etc/ffmpegupdate.conf"
 VERSION=9
 
+saucy_dep ()
+{
+	apt-get remove -y ffmpeg
+	apt-get purge -y libav-tools
+	add-apt-repository ppa:jon-severinsson/ffmpeg
+	apt-get update
+	apt-get -y dist-upgrade
+	apt-get install -y ffmpeg frei0r-plugins
+	apt-get --purge autoremove
+}
+
 #ONEIRIC SPECIFIC
 #oneiric install
 oneiric_dep ()
