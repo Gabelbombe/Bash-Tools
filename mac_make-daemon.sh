@@ -8,9 +8,9 @@ then
     exit 1
 fi
 
-username_=wsgi
-uid_=240
-realname_="WSGI Daemon"
+read -p "Username: " username_
+read -p "Realname: " realname_
+read -p "UID:      " uid_
 
 dscl . -create /Groups/_$username_
 dscl . -create /Groups/_$username_ PrimaryGroupID $uid_
