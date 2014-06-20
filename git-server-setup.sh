@@ -41,7 +41,9 @@ fi
 \BLUE "Adding GIT as user"
 
   # if user already exists, warn and exit
-  [[ $(getent passwd git) ]] || echo 'User exists...' ; exit 1
+  [[ -z "$(getent passwd git)" ]] || {
+    echo 'User exists...' ; exit 1
+  }
 
   # create user and set dir skeleton
   [ -d "/home/git" ] || useradd     \
@@ -51,11 +53,6 @@ fi
     --shell     /bin/bash           \
     --comment   'Local Archiver'    \
   git
-
-  # test
-  [ ! -z "$(getent passwd git)" ] || {
-    GREEN "User GIT does not exist"; exit 1
-  }
 
   chmod -R 0750 /home/git
 
