@@ -2,8 +2,12 @@
 # Git server setup for DEB/RHEL systems
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2013-11-18 @ 10:49:58
-# VER : Version 1.3.0
+# MOD : 2014-06-20 @ 11:32:41
+# VER : Version 1.4.0
+
+## Run:
+## cd /tmp && wget https://raw.githubusercontent.com/ehime/Bash-Tools/master/git-server-setup.sh
+## sudo chmod a+x git-server-setup.sh && sudo bash git-server-setup.sh
 
 # functions
 function BLUE() 
@@ -48,6 +52,11 @@ fi
     --comment   'Local Archiver'    \
   git
 
+  # test
+  [ ! -z "$(getent passwd git)" ] || {
+    GREEN "User GIT does not exist"; exit 1
+  }
+
   chmod -R 0750 /home/git
 
 \BLUE "Adding authorized_keys file"
@@ -62,6 +71,8 @@ fi
 
   # create a root key
   cat ~/.ssh/git_dsa.pub >> /home/git/.ssh/authorized_keys
+
+  BLUE "Root key is: $(cat ~/.ssh/git_dsa.pub)"
 
 echo -e "Done!" 
 

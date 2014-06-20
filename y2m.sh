@@ -71,9 +71,6 @@ if [[ $address =~ $regex ]]; then
       ALBUM=$1
     fi
 
-echo -e "published: $PUBLISHED \n author: $AUTHOR  \n title: $TITLE \n description: $DESCRIPTION \n $COMMENT"
-
-exit
 fi
     # adding thumbnail to the MP3
     thumb="$(youtube-dl --write-thumbnail $address |grep "to:.*" |awk '{for(i=6;i<=NF;i++) printf $i" "}' |cut -d'.' --complement -f2-)"
