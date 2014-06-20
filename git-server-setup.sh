@@ -78,7 +78,7 @@ echo -e "Done!"
 
 \BLUE "Creating Test Repository"
 
-  repository='/home/git/web-archive/test.git'
+  repository='/home/git/repositories/test.git'
 
   # create a test repository
   mkdir -p ${repository} && cd ${repository}
