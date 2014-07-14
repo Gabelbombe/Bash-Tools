@@ -8,6 +8,8 @@
 
 EXTS="${1}"
 DIRS="${2}"
+
+## ARGV+2 as array
 TYPE=( $(echo "${*:3}") )
 
 function run() 
@@ -15,43 +17,47 @@ function run()
     ## Prevent collision via extension(s)
     PATH="$HOME/Documents/ScriptSearch-${EXTS}.txt"
 
+
     ## Filetypes down the tree
     ## find . -type f -name '*.*' |sed 's|.*\.||' |sort -u
+    [ -z "$TYPE" ] && TYPE=('html?' 'jsp' 'php') #defaults
+        TYPE=$(printf "|%s" "${TYPE[@]}") #escalated types
 
-    [ -z "$TYPE" ] && TYPE=('html?' 'jsp' 'php')
-
-        TYPE=$(printf "|%s" "${TYPE[@]}") #escalates types
 
     [ -d "${DIRS}" ] && {
 
-        echo "Found: ${DIRS}" && cd "${DIRS}"
+        echo "Found: ${DIRS}" 
+        cd   "${DIRS}"
 
         [ -f "${PATH}" ] && {
-            echo '' > $PATH #clear
+            echo '' > $PATH #re-prime if exists
         }
 
-        for file in $(/usr/bin/find -E * -type f -iregex ".*(${TYPE:1})"); do 
+        #for file matches in joined types do
+        for file in $(exec find -E * -type f -iregex ".*(${TYPE:1})"); do 
 
             echo "Trying: $file"
 
-            contents='' #flush
-            contents=$(/usr/local/bin/python -c "if True:
+            contents='' #flush/reset for empty
+            contents=$(exec python -c "if True:
                 import sys, BeautifulSoup
                 html = BeautifulSoup.BeautifulSoup(open(sys.argv[1]).read())
                 for script in html.findAll(\"$EXTS\"):
                     print u''.join(unicode(item) for item in script)
             " "$(pwd)/$file" )
 
+            #if not empty DOMWalk do
             [ ! -z "${contents}" ] && {
                 echo -e "\n\tHIT: ${file}\n"
 
-                #pad file name length
-                filepath="== $(pwd)/$file =="
-                padding=$(/usr/local/bin/python -c "if True:
-                    import sys
-                    print '=' * ${#filepath}
-                ")
+                    #pad file name length
+                    filepath="== $(pwd)/$file =="
+                    padding=$(exec python -c "if True:
+                        import sys
+                        print '=' * ${#filepath}
+                    " )
 
+                #pump file with match contents
                 echo -e "$padding\n$filepath\n$padding" >> $PATH
                 echo -e "${contents}"                   >> $PATH
                 echo -e "\n\n\n"                        >> $PATH
