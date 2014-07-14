@@ -14,9 +14,9 @@ TYPE=( $(echo "${*:3}") )
 
 function run() 
 {
-    ## Prevent collision via extension(s)
-    PATH="$HOME/Documents/ScriptSearch-${EXTS}.txt"
 
+    ## Prevent collision via extension(s)
+    TRAIL="$HOME/Documents/ScriptSearch-${EXTS}.txt"
 
     ## Filetypes down the tree
     ## find . -type f -name '*.*' |sed 's|.*\.||' |sort -u
@@ -29,17 +29,17 @@ function run()
         echo "Found: ${DIRS}" 
         cd   "${DIRS}"
 
-        [ -f "${PATH}" ] && {
-            echo '' > $PATH #re-prime if exists
-        }
+            [ -f "${TRAIL}" ] && {
+                echo '' > $TRAIL #re-prime if exists
+            }
 
         #for file matches in joined types do
-        for file in $(exec find -E * -type f -iregex ".*(${TYPE:1})"); do 
+        for file in $(find -E * -type f -iregex ".*(${TYPE:1})"); do 
 
             echo "Trying: $file"
 
             contents='' #flush/reset for empty
-            contents=$(exec python -c "if True:
+            contents=$(python -c "if True:
                 import sys, BeautifulSoup
                 html = BeautifulSoup.BeautifulSoup(open(sys.argv[1]).read())
                 for script in html.findAll(\"$EXTS\"):
@@ -52,15 +52,15 @@ function run()
 
                     #pad file name length
                     filepath="== $(pwd)/$file =="
-                    padding=$(exec python -c "if True:
+                    padding=$(python -c "if True:
                         import sys
                         print '=' * ${#filepath}
                     " )
 
                 #pump file with match contents
-                echo -e "$padding\n$filepath\n$padding" >> $PATH
-                echo -e "${contents}"                   >> $PATH
-                echo -e "\n\n\n"                        >> $PATH
+                echo -e "$padding\n$filepath\n$padding" >> $TRAIL
+                echo -e "${contents}"                   >> $TRAIL
+                echo -e "\n\n\n"                        >> $TRAIL
             }  
 
         done
