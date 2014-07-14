@@ -8,47 +8,56 @@
 
 EXTS="${1}"
 DIRS="${2}"
+TYPE=( $(echo "${*:3}") )
 
-## Prevent collision via extension(s)
-PATH="$HOME/Documents/ScriptSearch-${EXTS}.txt"
+function run() 
+{
+    ## Prevent collision via extension(s)
+    PATH="$HOME/Documents/ScriptSearch-${EXTS}.txt"
 
-## Filetypes down the tree
-## find . -type f -name '*.*' |sed 's|.*\.||' |sort -u
+    ## Filetypes down the tree
+    ## find . -type f -name '*.*' |sed 's|.*\.||' |sort -u
 
-[ -d "${DIRS}" ] && {
+    [ -z "$TYPE" ] && TYPE=('html?' 'jsp' 'php')
 
-    echo "Found: ${DIRS}" && cd "${DIRS}"
+        TYPE=$(printf "|%s" "${TYPE[@]}") #escalates types
 
-    [ -f "${PATH}" ] && {
-        echo '' > $PATH #clear
+    [ -d "${DIRS}" ] && {
+
+        echo "Found: ${DIRS}" && cd "${DIRS}"
+
+        [ -f "${PATH}" ] && {
+            echo '' > $PATH #clear
+        }
+
+        for file in $(/usr/bin/find -E * -type f -iregex ".*(${TYPE:1})"); do 
+
+            echo "Trying: $file"
+
+            contents='' #flush
+            contents=$(/usr/local/bin/python -c "if True:
+                import sys, BeautifulSoup
+                html = BeautifulSoup.BeautifulSoup(open(sys.argv[1]).read())
+                for script in html.findAll(\"$EXTS\"):
+                    print u''.join(unicode(item) for item in script)
+            " "$(pwd)/$file" )
+
+            [ ! -z "${contents}" ] && {
+                echo -e "\n\tHIT: ${file}\n"
+
+                #pad file name length
+                filepath="== $(pwd)/$file =="
+                padding=$(/usr/local/bin/python -c "if True:
+                    import sys
+                    print '=' * ${#filepath}
+                ")
+
+                echo -e "$padding\n$filepath\n$padding" >> $PATH
+                echo -e "${contents}"                   >> $PATH
+                echo -e "\n\n\n"                        >> $PATH
+            }  
+
+        done
     }
-
-    for file in $(/usr/bin/find -E * -type f -iregex ".*(html?|jsp|php)"); do 
-
-        echo "Trying: $file"
-
-        contents='' #flush
-        contents=$(/usr/local/bin/python -c "if True:
-            import sys, BeautifulSoup
-            html = BeautifulSoup.BeautifulSoup(open(sys.argv[1]).read())
-            for script in html.findAll(\"$EXTS\"):
-                print u''.join(unicode(item) for item in script)
-        " "$(pwd)/$file" )
-
-        [ ! -z "${contents}" ] && {
-            echo -e "\n\tHIT: ${file}\n"
-
-            #pad file name length
-            filepath="== $(pwd)/$file =="
-            padding=$(/usr/local/bin/python -c "if True:
-                import sys
-                print '=' * ${#filepath}
-            ")
-
-            echo -e "$padding\n$filepath\n$padding" >> $PATH
-            echo -e "${contents}"                   >> $PATH
-            echo -e "\n\n\n"                        >> $PATH
-        }  
-
-    done
 }
+run 
