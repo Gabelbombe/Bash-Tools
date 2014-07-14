@@ -64,10 +64,15 @@ fi
   touch /home/git/.ssh/authorized_keys
   chmod 0600 /home/git/.ssh/authorized_keys
 
+  ## messed up because you're su when this happens
   ssh-keygen -f ~/.ssh/git_dsa -t dsa -N ''
+
+  echo -e "IdentityFile\nIdentityFile ~/.ssh/git_dsa" >> config
 
   # create a root key
   cat ~/.ssh/git_dsa.pub >> /home/git/.ssh/authorized_keys
+
+  ## better if you just ssh -i ~/.ssh/git_dsa git@localhost
 
   BLUE "Root key is: $(cat ~/.ssh/git_dsa.pub)"
 
