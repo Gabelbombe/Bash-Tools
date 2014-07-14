@@ -1,22 +1,23 @@
 #!/bin/bash
-# Development server setup
+# Search between tags down a directory tree
  
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2014-07-14 @ 11:01:30
+# MOD : 2014-07-14 @ 12:25:19
 
-# INP : $ ./ScripSearch.sh "/path/to/dir"
+# INP : $ ./ScripSearch.sh noscript "/path/to/dir"
 
-PATH="$HOME/Documents/ScriptSearch.txt"
 EXTS="${1}"
-DIRS="${2}" ## 
+DIRS="${2}"
+
+## Prevent collision via extension(s)
+PATH="$HOME/Documents/ScriptSearch-${EXTS}.txt"
+
+## Filetypes down the tree
+## find . -type f -name '*.*' |sed 's|.*\.||' |sort -u
 
 [ -d "${DIRS}" ] && {
 
     echo "Found: ${DIRS}" && cd "${DIRS}"
-
-    ## F-Types
-    #  find . -type f -name '*.*' |sed 's|.*\.||' |sort -u
-
 
     [ -f "${PATH}" ] && {
         echo '' > $PATH #clear
@@ -27,12 +28,12 @@ DIRS="${2}" ##
         echo "Trying: $file"
 
         contents='' #flush
-        contents=$(/usr/local/bin/python -c 'if True:
+        contents=$(/usr/local/bin/python -c "if True:
             import sys, BeautifulSoup
             html = BeautifulSoup.BeautifulSoup(open(sys.argv[1]).read())
-            for script in html.findAll("${EXTS}"):
-                print "".join(script.contents)
-        ' "$(pwd)/$file" )
+            for script in html.findAll(\"$EXTS\"):
+                print u''.join(unicode(item) for item in script)
+        " "$(pwd)/$file" )
 
         [ ! -z "${contents}" ] && {
             echo -e "\n\tHIT: ${file}\n"
@@ -47,7 +48,6 @@ DIRS="${2}" ##
             echo -e "$padding\n$filepath\n$padding" >> $PATH
             echo -e "${contents}"                   >> $PATH
             echo -e "\n\n\n"                        >> $PATH
-            contents='' #flush
         }  
 
     done
