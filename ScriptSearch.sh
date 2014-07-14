@@ -7,7 +7,8 @@
 # INP : $ ./ScripSearch.sh "/path/to/dir"
 
 PATH="$HOME/Documents/ScriptSearch.txt"
-DIRS="${1}" ## 
+EXTS="${1}"
+DIRS="${2}" ## 
 
 [ -d "${DIRS}" ] && {
 
@@ -29,7 +30,7 @@ DIRS="${1}" ##
         contents=$(/usr/local/bin/python -c 'if True:
             import sys, BeautifulSoup
             html = BeautifulSoup.BeautifulSoup(open(sys.argv[1]).read())
-            for script in html.findAll("script"):
+            for script in html.findAll("${EXTS}"):
                 print "".join(script.contents)
         ' "$(pwd)/$file" )
 
