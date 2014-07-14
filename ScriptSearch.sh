@@ -14,7 +14,6 @@ TYPE=( $(echo "${*:3}") )
 
 function run() 
 {
-
     ## Prevent collision via extension(s)
     TRAIL="$HOME/Documents/ScriptSearch-${EXTS}.txt"
 
@@ -33,8 +32,11 @@ function run()
                 echo '' > $TRAIL #re-prime if exists
             }
 
-        #for file matches in joined types do
-        for file in $(find -E * -type f -iregex ".*(${TYPE:1})"); do 
+
+        #while file matches in joined types do, 
+        #path match spaces http://goo.gl/1mMYSL
+        find -E * -type f -iregex ".*(${TYPE:1})" |\
+        while IFS= read -r file; do
 
             echo "Trying: $file"
 
@@ -66,4 +68,5 @@ function run()
         done
     }
 }
+
 run 
