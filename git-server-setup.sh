@@ -22,10 +22,11 @@ function GREEN()
 
 reset
 
-# ROOT check
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as su" 1>&2 ; exit 1
-fi
+## This will allow us the ability to su the user later
+##
+user="$(whoami)" 	# get current user for later
+sudo su 			# make root
+exec bash 			# use bash shell
 
 \BLUE "Installing GIT Core"
 
@@ -65,16 +66,17 @@ fi
   chmod 0600 /home/git/.ssh/authorized_keys
 
   ## messed up because you're su when this happens
-  ssh-keygen -f ~/.ssh/git_dsa -t dsa -N ''
+  sudo -u "${user}" ssh-keygen -f ~/.ssh/git_dsa -t dsa -N ''
 
-  echo -e "IdentityFile\nIdentityFile ~/.ssh/git_dsa" >> config
+  sudo -u "${user}" echo -e "IdentityFile\nIdentityFile ~/.ssh/git_dsa" >> config
 
   # create a root key
-  cat ~/.ssh/git_dsa.pub >> /home/git/.ssh/authorized_keys
+  sudo -u "${user}" cd ~/.ssh/ 
+  git_dsa.pub >> /home/git/.ssh/authorized_keys
 
   ## better if you just ssh -i ~/.ssh/git_dsa git@localhost
 
-  BLUE "Root key is: $(cat ~/.ssh/git_dsa.pub)"
+  BLUE "Root key is: $(sudo "${user}" cat ~/.ssh/git_dsa.pub)"
 
 echo -e "Done!" 
 
