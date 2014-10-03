@@ -37,8 +37,16 @@ fi
   apt-get install -y apache2
 
   # update apache2.conf
-  awk 'p&&!NF{print "\nServerName localhost";p=0}/# Global configuration/{p=1}1' apache2.conf \
-  > /tmp/apache2.conf && sudo mv /tmp/apache2.conf /etc/apache2
+  awk 'p&&!NF{print "\nServerName localhost";p=0}/# Global configuration/{p=1}1' /etc/apache2/apache2.conf \
+  > /tmp/apache2.conf 
+
+  ## test if empty of exit
+  [[ ! -s "/tmp/apache2.conf" ]] && {
+     sudo mv /tmp/apache2.conf /etc/apache2
+  } || {
+   echo -e "\n\nERROR: could not AWK Apache configuration file correctly, exiting..."
+   exit 1
+  }
 
   service apache2 reload
 
