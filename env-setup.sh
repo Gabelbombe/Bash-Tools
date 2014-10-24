@@ -94,12 +94,12 @@ fi
 ## PHP 5.5
 
   # actual install stuff 
-  sudo add-apt-repository ppa:ondrej/php5
-  sudo apt-get update sudo apt-get upgrade
-  sudo apt-get install -y php5
+#  sudo add-apt-repository ppa:ondrej/php5
+#  sudo apt-get update sudo apt-get upgrade
+#  sudo apt-get install -y php5
 
   # add my common packages
-  ext5=( fpm tokyo-tyrant gearman cli curl geoip mcrypt xmlrpc json tidy mongo mysql odbc xdebug dbg memcache memcached apcu xcache )
+  ext5=( fpm tokyo-tyrant gearman cli curl geoip mcrypt xmlrpc json tidy mongo mysql odbc xdebug dbg memcache memcached apcu xcache gd mysql)
   for pkg in "${ext5[@]}"; do
     apt-get install -y php5-${pkg}
   done
