@@ -37,7 +37,8 @@ for file in *; do
 			'UK' ) region='United Kingdom'	;;
 			'U'  ) region='USA'				;;
 			'UE' ) region='USA'				;;
-			*	 ) region='Unkown'			;;
+			'UA' ) region='USA'				;;
+			 *	 ) region='Unkown'			;;
 		esac
 
 		[ -d "$region" ] || mkdir "$region"
