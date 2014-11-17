@@ -1,0 +1,33 @@
+[color]
+	ui = on
+[core]
+	whitespace= fix,-indent-with-non-tab,-indent-with-tab,trailing-space,cr-at-eol
+	excludesfile = ~/.gitignore
+[alias]
+	ec = config --global -e
+	up = !git pull --rebase --prune $@ && git submodule update --init --recursive
+	df = !git diff --no-prefix && git diff --staged --no-prefix
+	clear = reset --hard
+	st = status
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
+	co = checkout
+	con = checkout -b
+	ci = commit -a
+	cim = commit -am
+	br = branch
+	ls = branch -a
+    cob = checkout -b
+    cm = !git add -A && git commit -m
+    save = !git add -A && git commit -m 'SAVEPOINT'
+    wip = !git add -u && git commit -m "WIP" 
+    undo = reset HEAD~1 --mixed
+    amend = commit -a --amend
+    wipe = !git add -A && git commit -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard
+    bclean = "!f() { git branch --merged ${1-master} | grep -v " ${1-master}$" | xargs -r git branch -d; }; f"
+    bdone = "!f() { git checkout ${1-master} && git up && git bclean ${1-master}; }; f"
+[mergetool]
+	keepBackup = FALSE
+[push]
+	default = upstream
