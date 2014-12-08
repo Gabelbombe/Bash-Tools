@@ -1,0 +1,6 @@
+refs/heads/master   jd
++refs/heads/pu      jd
+refs/heads/cogito$  rick
+refs/heads/bw/.*    virgil
+refs/heads/tmp/.*   .*
+refs/tags/v[0-9].*  jd

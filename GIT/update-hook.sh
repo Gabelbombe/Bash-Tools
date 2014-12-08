@@ -14,7 +14,7 @@ function grant ()
 {
 
   $VERBOSE && { 
-    echo -e >&2 "\n\e[95m-Grant- \t ${1}\e[39m\n"
+    echo -e >&2 "\e[95m-Grant- \t ${1}\e[39m\n"
   } || {
     echo grant
   }
@@ -33,7 +33,7 @@ function deny ()
 
 function info ()
 {
-  $VERBOSE && echo -e >&2 "\n\e[93m-Info-  \t ${1}\e[39m\n"
+  $VERBOSE && echo -e >&2 "\e[93m-Info-  \t ${1}\e[39m"
 }
 
 case "${1}" in 
@@ -62,3 +62,15 @@ case "${1}" in
     deny >/dev/null "Branch is not under refs/heads or refs/tags..."
   ;;
 esac
+
+allowed_users_file="${GIT_DIR}/info/allowed-users"
+username="$(id -u -n)"
+info "The user is: ${username}"
+
+if test -f "${allowed_users_file}"; then
+    while read heads user_patterns; do
+
+    done < <($allowed_users_file |grep -v '^#' |grep -v '^$')
+fi
+
+deny >/dev/null "There are no more rules to check. Denying access..."
