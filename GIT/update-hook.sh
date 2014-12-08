@@ -7,27 +7,58 @@
 
 umask 002
 
-verbose=false
-
+VERBOSE=true
 GLOBIGNORE=*
 
 function grant ()
 {
-  $verbose && echo -e >&2 "-Grant- \t $1"
-  echo grant
+
+  $VERBOSE && { 
+    echo -e >&2 "\n\e[95m-Grant- \t ${1}\e[39m\n"
+  } || {
+    echo grant
+  }
   exit 0
 }
 
 function deny ()
 {
-  $verbose && echo -e >&2 "-Deny- \t $1"
-  echo deny
+  $VERBOSE && {
+    echo -e >&2 "\n\e[91m-Deny-  \t ${1}\e[39m\n"
+  } || {
+    echo deny
+  }
   exit 0
 }
 
 function info ()
 {
-  $verbose && echo -e >&2 "-Info \t $1"
-  echo info
-  exit 0
+  $VERBOSE && echo -e >&2 "\n\e[93m-Info-  \t ${1}\e[39m\n"
 }
+
+case "${1}" in 
+  refs/tags/*)
+    git rev-parse --verify "${1}" && deny >/dev/null "You cannot overwrite an existing branch..."
+  ;;
+
+  refs/heads/*)
+    if expr "${2}" : '0*$' >/dev/null; then
+      info "The branch '${1}' is new..."
+    else 
+      gmb=$(git-merge-base "${2}" "${3}")
+      case "${gmb},${2}" in
+        "${2},${gmb}")
+          info "Update is Fast-Forward..."
+        ;;
+        *)
+          info "This is not a Fast-Forward update..."
+          noff=y
+        ;;
+      esac
+    fi
+  ;;
+
+  *)
+    deny >/dev/null "Branch is not under refs/heads or refs/tags..."
+  ;;
+esac
