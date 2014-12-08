@@ -45,7 +45,7 @@ case "${1}" in
     if expr "${2}" : '0*$' >/dev/null; then
       info "The branch '${1}' is new..."
     else 
-      gmb=$(git-merge-base "${2}" "${3}")
+      gmb=$(git merge-base "${2}" "${3}")
       case "${gmb},${2}" in
         "${2},${gmb}")
           info "Update is Fast-Forward..."
