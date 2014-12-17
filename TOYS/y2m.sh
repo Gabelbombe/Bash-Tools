@@ -2,21 +2,8 @@
 # Youtube to MP3 Bash Script
  
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2013-22-07 @ 12:01:20
-# VER : Version 3
-
-# Ubuntu
-# REQ : sudo apt-get install youtube-dl && youtube-dl -U
-# REQ : sudo apt-get install lame
-# REQ : ./getffmpegproper || ffmpeg [use: http://pastebin.com/iYGwzQGw]
-
-
-# Fedora (18) / Arch
-# REQ : sudo yum -y install youtube-dl && sudo youtube-dl -U
-# REQ : sudo yum -y install lame 
-# REQ : su -c "curl http://download.opensuse.org/repositories/home:/satya164:/fedorautils/Fedora_18/home:satya164:fedorautils.repo -o /etc/yum.repos.d/fedorautils.repo && yum install fedorautils"
-# REQ : su -c 'yum localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-18.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-18.noarch.rpm'
-# REQ : sudo yum -y install gstreamer gstreamer-ffmpeg gstreamer-plugins-bad gstreamer-plugins-bad-free gstreamer-plugins-bad-nonfree gstreamer-plugins-base gstreamer-plugins-good gstreamer-plugins-ugly ffmpeg yasm yasm-devel
+# MOD : 2014-12-05 @ 10:54:55
+# VER : Version 4 (OSX Darwin)
 
 # no long-opts supported except --help
 while getopts 'v:d:-:' OPT; do
@@ -41,7 +28,7 @@ if [ -e $address ]; then
     address=$1
 
     # default to /home/{user}/Music
-    dir="/home/${USER}/Music/"
+    dir="/Users/${USER}/Music/"
 fi
 
 regex='v=(.*)'
@@ -73,16 +60,24 @@ if [[ $address =~ $regex ]]; then
 
 fi
     # adding thumbnail to the MP3
-    thumb="$(youtube-dl --write-thumbnail $address |grep "to:.*" |awk '{for(i=6;i<=NF;i++) printf $i" "}' |cut -d'.' --complement -f2-)"
-
-#    rm -f "$thumb".{webm,mp4} # not needed for thumbstamp
-
+    youtube-dl --write-thumbnail $address -o thumbnail.jpg
     video_title="$(youtube-dl --get-title $address)"
+
+    author="$(echo $video_title |awk -NF '-' '{print$1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')" 
+    title="$(echo $video_title |awk -NF '-' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')" 
 
         # download the FLV stream
         youtube-dl -o "$video_title".flv $address
 
-    ffmpeg -i "$video_title".flv -i "$thumb".jpg -metadata title="my title" -acodec libmp3lame -ac 2 -ab 320k -vn -y "$video_title".mp3
+    ffmpeg -i "$video_title".flv          \
+           -i "thumbnail.jpg"             \
+           -metadata author="$author"     \
+           -metadata title="$title"       \
+           -acodec libmp3lame             \
+           -ac 2                          \
+           -ab 320k                       \
+           -vn                            \
+           -y "$video_title".mp3
 
         # untested
        if [ -z "$dir" ]; then
@@ -93,7 +88,8 @@ fi
        fi
 
     cp "$video_title".mp3 $dir
-#    rm "$video_title".flv "$thumb".jpg
+
+    rm -f "$video_title".flv "$video_title".mp3 "thumbnail.jpg" *.{webm,mp4}
 else
     echo "Sorry but you seemed to broken the interwebs."
 fi
