@@ -15,7 +15,8 @@ while getopts 'v:d:-:' OPT; do
 
       help) echo 'Long:  y2m -d {directory} -v {ex: http://www.youtube.com/watch?v=oHg5SJYRHA0‎}'
       echo 'Short: y2m {ex: http://www.youtube.com/watch?v=oHg5SJYRHA0‎}'
-      exit;;
+      exit
+      ;;
 
     esac;;
   esac
@@ -24,41 +25,21 @@ done
 cd /tmp
 
 # if short order (y2m http://addy.com)
-if [ -e $address ]; then
+[ -e $address ] && {
   address=$1
 
   # default to /home/{user}/Music
   dir="/Users/${USER}/Music/"
-fi
+}
 
 regex='v=(.*)'
 
-if [[ $address =~ $regex ]]; then
-
+[[ $address =~ $regex ]] && {
   video_id=${BASH_REMATCH[1]}
   video_id=$(echo $video_id | cut -d'&' -f1)
 
-  FILENAME=$(basename "$FILEPATH")
-  EXTENSION="${FILENAME##*.}"
-
-  if [ $video_id != "*" ]
-    then
-    DATA=`curl -s https://gdata.youtube.com/feeds/api/videos/$video_id?v=2`
-    PUBLISHED=`echo $DATA | php -r 'print simplexml_load_file("php://stdin")->published;' | sed 's/\..*Z/Z/'`
-    AUTHOR=`echo $DATA | php -r 'print simplexml_load_file("php://stdin")->author->name;'`
-    TITLE=`echo $DATA | php -r '$x = simplexml_load_file("php://stdin"); $ns = $x->getNameSpaces(true); $m = $x->children($ns["media"]); print $m->group->title;'`
-    DESCRIPTION=`echo $DATA | php -r '$x = simplexml_load_file("php://stdin"); $ns = $x->getNameSpaces(true); $m = $x->children($ns["media"]); print $m->group->description;'`
-    COMMENT="http://www.youtube.com/watch?v=$YOUTUBE_ID"
-    ALBUM=$AUTHOR
-
-    if [ "$1" ]
-      then
-      TITLE="$AUTHOR: $TITLE"
-      AUTHOR=$1
-      ALBUM=$1
-    fi
-
-  fi
+  filename=$(basename "$FILEPATH")
+  extension="${filename##*.}"
 
   # get thumbnail for MP3
   youtube-dl --write-thumbnail $address -o thumbnail.jpg
@@ -71,9 +52,6 @@ if [[ $address =~ $regex ]]; then
   youtube-dl -o "$video_title".flv $address
 
   ffmpeg -i "$video_title".flv         \
-        -id3v2_version 3               \
-        -metadata artist="$artist"     \
-        -metadata title="$title"       \
         -acodec libmp3lame             \
         -ac 2                          \
         -ab 320k                       \
@@ -81,19 +59,15 @@ if [[ $address =~ $regex ]]; then
         -y "$video_title".mp3
 
   # add image with LAME since FFMPEG changes too much....
-  lame --preset insane --ti thumbnail.jpg "$video_title".mp3
-  mv "$video_title".mp3.mp3 "$video_title".mp3
+  lame --preset insane -V0 --id3v2-only --ignore-tag-errors  \
+        --ti thumbnail.jpg                                   \
+        --ta "$artist"                                       \
+        --tt "$title"                                        \
+        --tv "TPE2=${artist}"                                \
+        "$video_title".mp3 "${dir}/${video_title}.mp3"
 
-  # untested
-  if [ -z "$dir" ]; then
-    if [[ ! -d $dir ]]; then
-      echo "Creating directory $dir"
-      echo mkdir -p $dir
-    fi
-  fi
 
-  cp "$video_title".mp3 $dir
-  rm -f "$video_title".flv "$video_title".mp3 thumbnail.jpg *.{webm,mp4}
-else
+  rm -f "$video_title".flv thumbnail.jpg *.{webm,mp4}
+} || {
   echo "Sorry but you seemed to broken the interwebs."
-fi
+}
