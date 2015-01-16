@@ -14,8 +14,8 @@ while getopts 'v:d:-:' OPT; do
     case $OPTARG in
 
       help) echo 'Long:  y2m -d {directory} -v {ex: http://www.youtube.com/watch?v=oHg5SJYRHA0‎}'
-      echo 'Short: y2m {ex: http://www.youtube.com/watch?v=oHg5SJYRHA0‎}'
-      exit
+            echo 'Short: y2m {ex: http://www.youtube.com/watch?v=oHg5SJYRHA0‎}'
+            exit
       ;;
 
     esac;;
@@ -59,12 +59,12 @@ regex='v=(.*)'
         -y "$video_title".mp3
 
   # add image with LAME since FFMPEG changes too much....
-  lame --preset insane -V0 --id3v2-only --ignore-tag-errors  \
-        --ti thumbnail.jpg                                   \
-        --ta "$artist"                                       \
-        --tt "$title"                                        \
-        --tv "TPE2=${artist}"                                \
-        "$video_title".mp3 "${dir}/${video_title}.mp3"
+  lame --preset insane -V0 --id3v2-only --ignore-tag-errors \
+       --ti thumbnail.jpg                                   \
+       --ta "$artist"                                       \
+       --tt "$title"                                        \
+       --tv "TPE2=${artist}"                                \
+       "$video_title".mp3 "${dir}/${video_title}.mp3"
 
 
   rm -f "$video_title".flv thumbnail.jpg *.{webm,mp4}
