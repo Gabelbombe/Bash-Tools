@@ -2,8 +2,11 @@
 # Youtube to MP3 Bash Script
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2015-01-08 @ 16:31:02
+# MOD : 2015-01-21 @ 16:11:44
 # VER : Version 5 (OSX Darwin)
+
+# REQ : http://developer.echonest.com/docs/v4/song.html
+
 
 # no long-opts supported except --help
 while getopts 'v:d:-:' OPT; do
@@ -26,10 +29,8 @@ cd /tmp
 
 # if short order (y2m http://addy.com)
 [ -e $address ] && {
-  address=$1
-
   # default to /home/{user}/Music
-  dir="/Users/${USER}/Music/"
+  address=$1; dir="/Users/${USER}/Music/"
 }
 
 regex='v=(.*)'
@@ -53,19 +54,18 @@ regex='v=(.*)'
 
   ffmpeg -i "$video_title".flv         \
         -acodec libmp3lame             \
-        -ac 2                          \
         -ab 320k                       \
+        -ac 2                          \
         -vn                            \
         -y "$video_title".mp3
 
   # add image with LAME since FFMPEG changes too much....
   lame --preset insane -V0 --id3v2-only --ignore-tag-errors \
-       --ti thumbnail.jpg                                   \
+       --ti 'thumbnail.jpg'                                 \
        --ta "$artist"                                       \
        --tt "$title"                                        \
        --tv "TPE2=${artist}"                                \
        "$video_title".mp3 "${dir}/${video_title}.mp3"
-
 
   rm -f "$video_title".flv thumbnail.jpg *.{webm,mp4}
 } || {
