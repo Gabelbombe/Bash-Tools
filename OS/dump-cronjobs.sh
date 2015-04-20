@@ -6,8 +6,6 @@
 # VER : Version 1.1
 # SYS : Working for Debian and RHEL
 
-set -x
-
 # System-wide crontab file and cron job directory. Change these for your system.
 CRONTAB='/etc/crontab'
 CRONDIR='/etc/cron.d'
