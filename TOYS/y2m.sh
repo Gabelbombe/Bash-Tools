@@ -2,17 +2,17 @@
 # Youtube to MP3 Bash Script
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2015-01-21 @ 16:11:44
+# MOD : 2015-07-06 @ 09:44:54
 # VER : Version 5 (OSX Darwin)
 
 # REQ : http://developer.echonest.com/docs/v4/song.html
 
-
 # no long-opts supported except --help
-while getopts 'v:d:-:' OPT; do
+while getopts 'v:d:i:-:' OPT; do
   case $OPT in
     v) address=$OPTARG;;
     d) dir=$OPTARG;;
+    i) image=$OPTARG ; eval image=$image;;
     -) #long option
     case $OPTARG in
 
@@ -42,12 +42,21 @@ regex='v=(.*)'
   filename=$(basename "$FILEPATH")
   extension="${filename##*.}"
 
-  # get thumbnail for MP3
-  youtube-dl --write-thumbnail $address -o thumbnail.jpg
-  video_title="$(youtube-dl --get-title $address)"
+  # remove thumb if exists
+  [ -f 'thumbnail.jpg' ] && {
+    rm -f 'thumbnail.jpg'
+  }
 
-  artist="$(echo $video_title |awk -NF '-' '{print$1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
-  title="$(echo $video_title |awk -NF '-' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
+  # get/set thumbnail for MP3
+  [ ! -f "${image}" ] && {
+    youtube-dl --write-thumbnail $address -o thumbnail.jpg
+  } || {
+    cp -ir "${image}" thumbnail.jpg
+  }
+
+  video_title="$(youtube-dl --get-title $address |sed s/://g)"
+  artist="$(echo $video_title |awk -F '-' '{print$1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
+  title="$(echo $video_title |awk -F '-' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
 
   # download the FLV stream
   youtube-dl -o "$video_title".flv $address
@@ -67,7 +76,7 @@ regex='v=(.*)'
        --tv "TPE2=${artist}"                                \
        "$video_title".mp3 "${dir}/${video_title}.mp3"
 
-  rm -f "$video_title".flv thumbnail.jpg *.{webm,mp4}
+  rm -f *.{webm,mp4,flv,mp3,jpg}
 } || {
   echo "Sorry but you seemed to broken the interwebs."
 }
