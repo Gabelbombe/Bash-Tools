@@ -2,10 +2,11 @@
 # Youtube to MP3 Bash Script
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2015-07-06 @ 09:44:54
+# MOD : 2015-01-21 @ 16:11:44
 # VER : Version 5 (OSX Darwin)
 
 # REQ : http://developer.echonest.com/docs/v4/song.html
+
 
 # no long-opts supported except --help
 while getopts 'v:d:i:-:' OPT; do
@@ -49,19 +50,19 @@ regex='v=(.*)'
 
   # get/set thumbnail for MP3
   [ ! -f "${image}" ] && {
-    youtube-dl --write-thumbnail $address -o thumbnail.jpg
+    youtube-dl --no-warnings --write-thumbnail $address -o thumbnail.jpg
   } || {
     cp -ir "${image}" thumbnail.jpg
   }
 
-  video_title="$(youtube-dl --get-title $address |sed s/://g)"
+  video_title="$(youtube-dl --no-warnings --get-title $address |sed s/://g)"
   artist="$(echo $video_title |awk -F '-' '{print$1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
   title="$(echo $video_title |awk -F '-' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
 
   # download the FLV stream
-  youtube-dl -o "$video_title".flv $address
+  youtube-dl --no-warnings -o "$video_title" $address
 
-  ffmpeg -i "$video_title".flv         \
+  ffmpeg -i "$video_title".mp4         \
         -acodec libmp3lame             \
         -ab 320k                       \
         -ac 2                          \
