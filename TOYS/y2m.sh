@@ -31,14 +31,23 @@ done
 
 cd /tmp
 
+function ere_quote () {
+    sed 's/[]\.|$(){}?+*^]/\\&/g' <<< "$*"
+}
+
 ## if short order (y2m http://addy.com)
 [ -e $address ] && {
   ## default to /home/{user}/Music
   address=$1; dir="/Users/${USER}/Music/"
 }
 
-regex='v=(.*)'
+[ ! -d "${dir}" ] && {
+  echo "[error] Directory '${dir}' does not not exist..." ; exit 1
+}
 
+echo "[info] Using directory: ${dir}"
+
+regex='v=(.*)'
 [[ $address =~ $regex ]] && {
   video_id=${BASH_REMATCH[1]}
   video_id=$(echo $video_id | cut -d'&' -f1)
@@ -61,14 +70,18 @@ regex='v=(.*)'
   ## get title to start off with...
   video_title="$(youtube-dl --no-warnings --get-title $address |sed s/://g)"
 
-  artist="$(echo $video_title |awk -F '-' '{print$1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
-  title="$(echo $video_title |awk -F '-' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
-  video=$(ls |grep "$video_title") ## format independant, might need: head -n1
+  echo "[info] Title is: ${video_title}"
 
   # download the FLV stream
   youtube-dl --no-warnings -o "$video_title" $address
 
-  ffmpeg -i "$video_type"              \
+  artist="$(echo $video_title |awk -F '-' '{print$1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
+  title="$(echo $video_title  |awk -F '-' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
+  video=$(ls |grep "${artist}") ## format independant, might need: head -n1, also hates ( ) [ ] etc
+
+  echo "[info] Using Video: ${video}"
+
+  ffmpeg -i "$video"                   \
         -acodec libmp3lame             \
         -ab 320k                       \
         -ac 2                          \
