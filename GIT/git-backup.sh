@@ -3,7 +3,7 @@
 
 # CPR : Jd Daniel :: Ehime-ken
 # MOD : 2015-08-04 @ 10:29:06
-# REF :
+# REF : https://goo.gl/Z38oBh
 # VER : Version 1.0.0-dev
 
 fr="$1"
