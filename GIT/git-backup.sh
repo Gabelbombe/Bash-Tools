@@ -2,9 +2,9 @@
 # ORG backup script
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2015-08-04 @ 16:53:01
+# MOD : 2015-08-05 @ 12:06:32
 # REF : https://goo.gl/Z38oBh
-# VER : Version 1.1.0-dev
+# VER : Version 1.2.0-dev
 
 # REQ : Bash 4.3+
 
@@ -56,11 +56,6 @@ fi
 [[ -z "$fr" ]] && { echo "=> [Backup repository]  (-f|--from) cannot remain empty" >&2 ; exit 1 ; }
 [[ -z "$to" ]] && { echo "=> [Storage repository] (-t|--to) cannot remain empty" >&2 ; exit 1 ; }
 
-if [[ "$user" == "" || "$pass" == "" ]]; then
-  echo "=> Username and Password for GIT are a requirement." >&2 ; exit 1
-fi
-
-
 ## Unset usage from global scope
 unset -f print_usage
 
@@ -99,12 +94,14 @@ echo -e "=> Attempting to remove ${repository}"
 # echo "=> Token Bearer: $token"
 # curl -X GET -H "'Authorization: token $token'" https://api.github.com/repos/
 
-drop=$(echo $repository |sed 's/:/\//g')
-org=$(echo $drop |awk -F '/' '{print$1}')
-rep=$(echo $drop |awk -F '/' '{print$2}')
+if [[ "$user" != "" || "$pass" != "" ]]; then
+  drop=$(echo $repository |sed 's/:/\//g')
+  org=$(echo $drop |awk -F '/' '{print$1}')
+  rep=$(echo $drop |awk -F '/' '{print$2}')
 
-## Get URL to delete
-url=$(curl --silent -u "$user:$pass" -X GET https://api.github.com/orgs/$org/repos \
-|grep -i "$drop" |grep '"url"' |awk -F '":' '{print$2}' |cut -d'"' -f2)
+  ## Get URL to delete
+  url=$(curl --silent -u "$user:$pass" -X GET https://api.github.com/orgs/$org/repos \
+  |grep -i "$drop" |grep '"url"' |awk -F '":' '{print$2}' |cut -d'"' -f2)
 
-curl -v -u "$user:$pass" -X DELETE "$url"
+  curl -v -u "$user:$pass" -X DELETE "$url"
+fi
