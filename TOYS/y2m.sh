@@ -11,8 +11,8 @@
 ##  ##  ##  ##
 ##  ##  ##  ##
 
-local debug=''
-local video_title=''
+debug=''
+video_title=''
 
 ## no long-opts supported except --help
 while getopts 'v:d:t:i:-:' OPT; do
