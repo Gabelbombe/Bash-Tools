@@ -92,7 +92,6 @@ regex='v=(.*)'
   title="$(echo $video_title  |awk -F '-' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
   video=$(ls |grep "${artist}") ## format independant, might need: head -n1, also hates ( ) [ ] etc
 
-exit
   echo "[info] Using Video: ${video}"
 
   ffmpeg -i "$video"                   \
