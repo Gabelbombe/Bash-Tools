@@ -2,18 +2,22 @@
 # Youtube to MP3 Bash Script
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2015-07-27 @ 11:53:05
-# VER : Version 6 (OSX Darwin)
+# MOD : 2015-08-26 @ 11:28:44
+# VER : Version 7 (OSX Darwin)
 
+# REF : https://github.com/ehime/Bash-Tools/blob/master/TOYS/y2m.sh
 # REQ : http://developer.echonest.com/docs/v4/song.html
 
 ##  ##  ##  ##
 ##  ##  ##  ##
 
+local debug=''
+local video_title=''
 
 ## no long-opts supported except --help
-while getopts 'v:d:i:-:' OPT; do
+while getopts 'v:d:t:i:-:' OPT; do
   case $OPT in
+    t) video_title=$OPTARG;;
     v) address=$OPTARG;;
     d) dir=$OPTARG;;
     i) image=$OPTARG ; eval image=$image;;
@@ -23,6 +27,16 @@ while getopts 'v:d:i:-:' OPT; do
       help) echo 'Long:  y2m -d {directory} -v {ex: http://www.youtube.com/watch?v=oHg5SJYRHA0‎}'
             echo 'Short: y2m {ex: http://www.youtube.com/watch?v=oHg5SJYRHA0‎}'
             exit
+      ;;
+
+      ## continues with argv[2] as address...
+      debug) debug='--verbose --print-traffic --dump-pages'
+             address="${2}"
+      ;;
+
+      flush) echo "[info] Flushing caches..."
+             youtube-dl --rm-cache-dir
+             exit
       ;;
 
     esac;;
@@ -36,14 +50,11 @@ function ere_quote () {
 }
 
 ## if short order (y2m http://addy.com)
-[ -e $address ] && {
-  ## default to /home/{user}/Music
-  address=$1; dir="/Users/${USER}/Music/"
-}
+[ "x$address" == "x" ] && { address=$1 ; }
+[ "x$dir" == "x" ]     && { dir="/Users/${USER}/Music/" ; }
 
-[ ! -d "${dir}" ] && {
-  echo "[error] Directory '${dir}' does not not exist..." ; exit 1
-}
+## dir exists?
+[ ! -d "${dir}" ]      && { echo "[error] Directory '${dir}' does not not exist..." ; exit 1 ; }
 
 echo "[info] Using directory: ${dir}"
 
@@ -62,23 +73,26 @@ regex='v=(.*)'
 
   ## get/set thumbnail for MP3
   [ ! -f "${image}" ] && {
-    youtube-dl --no-warnings --write-thumbnail $address -o thumbnail.jpg
+    youtube-dl $debug --no-warnings --write-thumbnail $address -o thumbnail.jpg
   } || {
     cp -ir "${image}" thumbnail.jpg
   }
 
-  ## get title to start off with...
-  video_title="$(youtube-dl --no-warnings --get-title $address |sed s/://g)"
+  ## if you haven't defined a title....
+  [ "x$video_title" == "x" ] && {
+    video_title="$(youtube-dl $debug --no-warnings --get-title $address |sed s/://g)"
+  }
 
   echo "[info] Title is: ${video_title}"
 
   # download the FLV stream
-  youtube-dl --no-warnings -o "$video_title" $address
+  youtube-dl $debug --no-warnings -o "$video_title" $address
 
   artist="$(echo $video_title |awk -F '-' '{print$1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
   title="$(echo $video_title  |awk -F '-' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
   video=$(ls |grep "${artist}") ## format independant, might need: head -n1, also hates ( ) [ ] etc
 
+exit
   echo "[info] Using Video: ${video}"
 
   ffmpeg -i "$video"                   \
