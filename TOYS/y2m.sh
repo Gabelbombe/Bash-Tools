@@ -2,7 +2,7 @@
 # Youtube to MP3 Bash Script
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2015-08-26 @ 11:28:44
+# MOD : 2015-08-27 @ 12:32:43
 # VER : Version 7 (OSX Darwin)
 
 # REF : https://github.com/ehime/Bash-Tools/blob/master/TOYS/y2m.sh
@@ -13,6 +13,9 @@
 
 debug=''
 video_title=''
+
+## TODO: Clean up  optargs since its ugly and could be a lot better
+## TODO: github.com/ehime/Bash-Tools/blob/master/GIT/git-backup.sh
 
 ## no long-opts supported except --help
 while getopts 'v:d:t:i:-:' OPT; do
@@ -45,6 +48,7 @@ done
 
 cd /tmp
 
+## TODO: implement for stripping / quoting
 function ere_quote () {
     sed 's/[]\.|$(){}?+*^]/\\&/g' <<< "$*"
 }
@@ -60,23 +64,28 @@ echo "[info] Using directory: ${dir}"
 
 regex='v=(.*)'
 [[ $address =~ $regex ]] && {
+
+  ## argsmap
   video_id=${BASH_REMATCH[1]}
   video_id=$(echo $video_id | cut -d'&' -f1)
 
   filename=$(basename "$FILEPATH")
   extension="${filename##*.}"
 
+
   ## remove thumb if exists
   [ -f 'thumbnail.jpg' ] && {
     rm -f 'thumbnail.jpg'
   }
 
+
   ## get/set thumbnail for MP3
   [ ! -f "${image}" ] && {
-    youtube-dl $debug --no-warnings --write-thumbnail $address -o thumbnail.jpg
+    youtube-dl $debug --no-warnings --write-thumbnail $address -oa thumbnail.jpg
   } || {
     cp -ir "${image}" thumbnail.jpg
   }
+
 
   ## if you haven't defined a title....
   [ "x$video_title" == "x" ] && {
@@ -85,21 +94,28 @@ regex='v=(.*)'
 
   echo "[info] Title is: ${video_title}"
 
+
   # download the FLV stream
   youtube-dl $debug --no-warnings -o "$video_title" $address
 
+
+  ## TODO: Add API lookup via Echonest
   artist="$(echo $video_title |awk -F '-' '{print$1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
   title="$(echo $video_title  |awk -F '-' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
   video=$(ls |grep "${artist}") ## format independant, might need: head -n1, also hates ( ) [ ] etc
 
   echo "[info] Using Video: ${video}"
 
+
+  ## REQ: FFMPEG proper installers via
+  ## https://github.com/ehime/Bash-Tools/tree/master/STANDUP
   ffmpeg -i "$video"                   \
         -acodec libmp3lame             \
         -ab 320k                       \
         -ac 2                          \
         -vn                            \
         -y "$video_title".mp3
+
 
   ## add image with LAME since FFMPEG changes too much....
   lame --preset insane -V0 --id3v2-only --ignore-tag-errors \
@@ -109,7 +125,8 @@ regex='v=(.*)'
        --tv "TPE2=${artist}"                                \
        "$video_title".mp3 "${dir}/${video_title}.mp3"
 
+
   rm -f *.{webm,mp4,flv,mp3,jpg}
 } || {
-  echo "Sorry but you seemed to broken the interwebs."
+  echo "You fucked up..."
 }
