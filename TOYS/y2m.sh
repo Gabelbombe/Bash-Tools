@@ -3,7 +3,7 @@
 
 # CPR : Jd Daniel :: Ehime-ken
 # MOD : 2015-08-27 @ 12:32:43
-# VER : Version 7 (OSX Darwin)
+# VER : Version 7 (OSX Maverick)
 
 # REF : https://github.com/ehime/Bash-Tools/blob/master/TOYS/y2m.sh
 # REQ : http://developer.echonest.com/docs/v4/song.html
