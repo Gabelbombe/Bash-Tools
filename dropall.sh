@@ -2,9 +2,16 @@
 # Recursive file deletion
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2015-09-04 @ 09:02:52
+# MOD : 2015-09-04 @ 09:21:03
 # REF : https://goo.gl/bHkuWG
-# VER : Version 1.0.0-dev
+# VER : Version 1.0.1-dev
+
+## Example:
+## cd /tmp && mkdir -p foo/bar/baz
+## shopt -s globstar ; for d in **/*/; do touch -- "$d/.test"; done
+## ls -aR foo ; ./dropall.sh .test ; ls -aR foo
+## ## ## ##
+## ## ## ##
 
 function dropall ()
 {
