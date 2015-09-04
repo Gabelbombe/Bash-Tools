@@ -4,7 +4,7 @@
 # CPR : Jd Daniel :: Ehime-ken
 # MOD : 2015-09-04 @ 09:51:16
 # REF : https://goo.gl/a5ZUqx
-# VER : Version 1.0.0-dev
+# VER : Version 1.0.1-dev
 
 ################################################################################
 ################################################################################
@@ -18,8 +18,8 @@ declare -i port=22
 
 for server in ${servers[@]} ; do
   nc -w 3 -z $server $port && {
-    echo Success: $port
+    echo Success: ${server}:${port}
   } || {
-    echo Failure: $port
+    echo Failure: ${server}:${port}
   }
 done
