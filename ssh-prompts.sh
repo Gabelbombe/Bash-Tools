@@ -1,5 +1,5 @@
 #!/bin/bash
-# Detects of server accepts connections
+# Detects if server accepts connections
 
 # CPR : Jd Daniel :: Ehime-ken
 # MOD : 2015-09-04 @ 09:51:16
