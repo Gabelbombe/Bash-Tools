@@ -2,8 +2,8 @@
 # Youtube to MP3 Bash Script
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2015-08-27 @ 12:32:43
-# VER : Version 7 (OSX Maverick)
+# MOD : 2015-09-08 @ 21:00:56
+# VER : Version 7.0.1 (OSX Maverick)
 
 # REF : https://github.com/ehime/Bash-Tools/blob/master/TOYS/y2m.sh
 # REQ : http://developer.echonest.com/docs/v4/song.html
@@ -20,8 +20,8 @@ video_title=''
 ## no long-opts supported except --help
 while getopts 'v:d:t:i:-:' OPT; do
   case $OPT in
-    t) video_title=$OPTARG;;
-    v) address=$OPTARG;;
+    t) video_title="${OPTARG}";;
+    v) address="${OPTARG}";;
     d) dir=$OPTARG;;
     i) image=$OPTARG ; eval image=$image;;
     -) ## long option
@@ -80,11 +80,13 @@ regex='v=(.*)'
 
 
   ## get/set thumbnail for MP3
-  [ ! -f "${image}" ] && {
-    youtube-dl $debug --no-warnings --write-thumbnail $address -oa thumbnail.jpg
-  } || {
+  if [[ "x$image" == "x" && ! -f "${image}" ]] ; then
+    echo "[info] Downloading thumbnail"
+    youtube-dl $debug --no-warnings --write-thumbnail $address -o thumbnail.jpg
+  else
+    echo "[info] Using ${image} as thumbail"
     cp -ir "${image}" thumbnail.jpg
-  }
+  fi
 
 
   ## if you haven't defined a title....
