@@ -9,6 +9,37 @@ VER='7.0.2'
 # REQ : http://developer.echonest.com/docs/v4/song.html
 # REQ : https://github.com/aadsm/JavaScript-ID3-Reader
 
+# Reading tags via: brew install eyed3
+# $ eyeD3 Black\ Rebel\ Motorcycle\ Club\ -\ Red\ Eyes\ And\ Tears.mp3
+# Black Rebel Motorcycle Club - Red Eyes And Tears.mp3	[ 8.09 MB ]
+# -------------------------------------------------------------------------------
+# Time: 03:58	MPEG1, Layer III	[ ~283 kb/s @ 44100 Hz - Joint stereo ]
+# -------------------------------------------------------------------------------
+# ID3 v2.3:
+# title: Red Eyes And Tears
+# artist: Black Rebel Motorcycle Club
+# album:
+# album artist: Black Rebel Motorcycle Club
+# track:
+# Comment: [Description: ] [Lang: XXX]
+#
+# CPR: Jd Daniel :: Ehime-ken
+# MOD: 2016-01-14 @ 09:34:34
+# VER: Version 7.0.2 (OSX Maverick)
+# REF: https://www.youtube.com/watch?v=kOdHND_wt0k
+#
+# OTHER Image: [Size: 15747 bytes] [Type: image/jpeg]
+# Description:
+#
+# -------------------------------------------------------------------------------
+
+## We can keep MP3's in new working version now with the following code
+##
+# function version { echo "$@" | gawk -F. '{ printf("%03d%03d%03d\n", $1,$2,$3); }'; }
+# if [ "$(version $(eyeD3 $SONG |grep '\[VER\]' |awk '{print$2}'))" -gt "$(version 7.5)" ]; then
+#   bash $(which y2m |head -n1 |awk '{print$3}') "$(version $(eyeD3 $SONG |grep '\[REF\]' |awk '{print$2}'))"
+# fi
+
 
 ##  ##  ##  ##
 ##  ##  ##  ##
