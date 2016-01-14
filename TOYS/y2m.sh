@@ -62,10 +62,10 @@ function ere_quote () {
 
 ## set comments
 COMMENTS="
-CPR: $CPR
-MOD: $MOD
-VER: $VER
-REF: $address
+[CPR] $CPR
+[MOD] $MOD
+[VER] $VER
+[REF] $address
 "
 
 echo "[info] Using directory: ${dir}"
