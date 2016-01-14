@@ -75,7 +75,7 @@ while getopts 'v:d:t:i:-:' OPT; do
              exit
       ;;
 
-      version echo "$VER" ; exit
+      version) echo "$VER" ; exit
 
     esac;;
   esac
