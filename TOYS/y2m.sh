@@ -1,9 +1,9 @@
 #!/bin/bash
 # Youtube to MP3 Bash Script
 
-# CPR : Jd Daniel :: Ehime-ken
-# MOD : 2015-09-08 @ 21:00:56
-# VER : Version 7.0.1 (OSX Maverick)
+CPR='Jd Daniel :: Ehime-ken'
+MOD=$(date +"%Y-%m-%d @ %H:%M:%S")
+VER='Version 7.0.2 (OSX Maverick)'
 
 # REF : https://github.com/ehime/Bash-Tools/blob/master/TOYS/y2m.sh
 # REQ : http://developer.echonest.com/docs/v4/song.html
@@ -59,6 +59,14 @@ function ere_quote () {
 
 ## dir exists?
 [ ! -d "${dir}" ]      && { echo "[error] Directory '${dir}' does not not exist..." ; exit 1 ; }
+
+## set comments
+COMMENTS="
+CPR: $CPR
+MOD: $MOD
+VER: $VER
+REF: $address
+"
 
 echo "[info] Using directory: ${dir}"
 
@@ -122,9 +130,10 @@ regex='v=(.*)'
   ## add image with LAME since FFMPEG changes too much....
   lame --preset insane -V0 --id3v2-only --ignore-tag-errors \
        --ti 'thumbnail.jpg'                                 \
-       --ta "$artist"                                       \
-       --tt "$title"                                        \
+       --ta "${artist}"                                     \
+       --tt "${title}"                                      \
        --tv "TPE2=${artist}"                                \
+       --tc "${COMMENTS}"                                   \
        "$video_title".mp3 "${dir}/${video_title}.mp3"
 
 
