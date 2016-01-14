@@ -35,7 +35,7 @@ VER='7.0.2'
 
 ## We can keep MP3's in new working version now with the following code
 ##
-# function version { echo "$@" | gawk -F. '{ printf("%03d%03d%03d\n", $1,$2,$3); }'; }
+# function version { echo "$@" |gawk -F. '{ printf("%03d%03d%03d\n", $1,$2,$3); }'; }
 # if [ "$(version $(eyeD3 $SONG |grep '\[VER\]' |awk '{print$2}'))" -gt "$(version 7.5)" ]; then
 #   bash $(which y2m |head -n1 |awk '{print$3}') "$(version $(eyeD3 $SONG |grep '\[REF\]' |awk '{print$2}'))"
 # fi
