@@ -7,6 +7,8 @@ VER='7.0.2'
 
 # REF : https://github.com/ehime/Bash-Tools/blob/master/TOYS/y2m.sh
 # REQ : http://developer.echonest.com/docs/v4/song.html
+# REQ : https://github.com/aadsm/JavaScript-ID3-Reader
+
 
 ##  ##  ##  ##
 ##  ##  ##  ##
