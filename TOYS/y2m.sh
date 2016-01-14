@@ -3,7 +3,7 @@
 
 CPR='Jd Daniel :: Ehime-ken'
 MOD=$(date +"%Y-%m-%d @ %H:%M:%S")
-VER='Version 7.0.2 (OSX Maverick)'
+VER='7.0.2'
 
 # REF : https://github.com/ehime/Bash-Tools/blob/master/TOYS/y2m.sh
 # REQ : http://developer.echonest.com/docs/v4/song.html
