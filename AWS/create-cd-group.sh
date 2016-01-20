@@ -55,7 +55,7 @@ for host in $hostgroup ; do
 	#For some consistency in naming conventions
 	env=$(toUpper $envname)        # `echo $envname|tr '[:lower:]' '[:upper:]'`
 	app_name=$(toUpper $app)       # `echo $app|tr '[:lower:]' '[:upper:]'`
-	sub_comp=$(toUpper $subcomp)   # `echo $subcomp|tr '[:lower:]' '[:upper:]'`
+	sub_comp=$(toUpper $deployname)   # `echo $subcomp|tr '[:lower:]' '[:upper:]'`
 
 	#concatenate the tags string so you dont override the existing values, you want to update not override
 	tags="$tags Key=Name,Value=$host,Type=KEY_AND_VALUE"
