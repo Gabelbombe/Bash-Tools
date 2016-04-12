@@ -15,12 +15,12 @@ cd /tmp
 
 echo -e '\nPulling...\n'
 git clone --bare "$fr" from/
-cd from
+cd $from
 
 echo -e '\nGrafting...\n'
 git checkout "$b1" "remotes/$b1"
 
-git push  --mirror   "$to"
+git push --mirror "$to"
 rm -fr /tmp/from
 
 echo -e '\nSuccess!!'
