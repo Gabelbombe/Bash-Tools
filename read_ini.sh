@@ -12,9 +12,6 @@
 #
 #
 
-
-
-
 function read_ini()
 {
   # Be strict with the prefix, since it's going to be run through eval
@@ -87,6 +84,12 @@ function read_ini()
         CLEAN_ENV=1
       ;;
 
+      --sections | -s )
+        shift
+        SECTIONS=()
+        SECTIONS_ONLY=1
+      ;;
+
       --booleans | -b )
         shift
         BOOLEANS=$1
@@ -115,7 +118,7 @@ function read_ini()
   done
 
   if [ -z "$INI_FILE" ] && [ "${CLEAN_ENV}" = 0 ] ;then
-    echo -e "Usage: read_ini [-c] [-b 0| -b 1]] [-p PREFIX] FILE"\
+    echo -e "Usage: read_ini [-c] [-b 0| -b 1]] [-s] [-p PREFIX] FILE"\
       "[SECTION]\n  or   read_ini -c [-p PREFIX]" >&2
     cleanup_bash
     return 1
@@ -195,6 +198,8 @@ function read_ini()
       continue
     fi
 
+    SECTIONS+=("${SECTION}")
+
     # Are we getting only a specific section? And are we currently in it?
     if [ ! -z "$INI_SECTION" ]
     then
@@ -223,7 +228,6 @@ function read_ini()
     VAR="${VAR%%+([[:space:]])}"
     VAL="${VAL##+([[:space:]])}"
     VAR=$(echo $VAR)
-
 
     # Construct variable name:
     # ${VARNAME_PREFIX}__$SECTION__$VAR
@@ -274,6 +278,11 @@ function read_ini()
 
     eval "$VARNAME=$VAL"
   done  <"${INI_FILE}"
+
+  if [[ 1 = $SECTIONS_ONLY ]] ; then
+    printf '  %s\n' "${SECTIONS[@]}" | sort -u
+    return
+  fi
 
   # return also the number of parsed sections
   eval "$INI_NUMSECTIONS_VARNAME=$SECTIONS_NUM"
