@@ -1,5 +1,5 @@
-aws-ec2-ebs-automatic-snapshot-bash
-===================================
+EC2 EBS Auto Snapshots
+======================
 
 ####Bash script for Automatic EBS Snapshots and Cleanup on Amazon Web Services (AWS)
 
