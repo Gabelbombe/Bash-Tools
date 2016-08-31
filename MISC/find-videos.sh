@@ -18,7 +18,7 @@ IFS=$(echo -en "\n\b")
 
 # Generate output from path and size using: `stat -c "%s" filepath`
 OUTPUT=""
-for f in `find ${DIR} -type f -iname -regex ".*\.${TYPES_RE}"`; do
+for f in `find ${DIR} -type f -iregex ".*\.${TYPES_RE}"`; do
   SIZE=`stat -c "%s" ${f}`
   SIZEK=`echo "scale=2; ${SIZE} / 1024" | bc -l`
   SIZEM=`echo "scale=2; ${SIZEK} / 1024" | bc -l`
