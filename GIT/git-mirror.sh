@@ -8,11 +8,11 @@ to="$2"
   exit 1
 }
 
-echo -e '\nPulling...\n'
+echo -e '\n[info] Pulling...\n'
 cd /tmp && git clone --bare     "$fr" from/
 
-echo -e '\nPushing...\n'
+echo -e '\n[info] Pushing...\n'
 cd from && git push  --mirror   "$to"
 rm -fr /tmp/from
 
-echo -e '\nSuccess!!'
+echo -e '\n[info] Success!!'
