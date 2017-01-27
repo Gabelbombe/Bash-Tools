@@ -1,20 +1,22 @@
-#!/bin/env bash
-# Converter for GitHub -> Subversion Repositories
+#!/usr/local/env bash
+# Converter for GitHub to Subversion Repositories
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2013-03-09 @ 16:26:53
-# VER : Version 1b
+# MOD : 2017-01-26 @ 19:33:59
+# VER : Version 1c
 
-clear; #set -x #debug
+## Uncomment set to debug
 
+clear ;                 # set -x #debug
 REPO={THE_REPO_ROOT} in # svn+ssh://user@domain.com/api/svn_name
 
-# if you want to burn and rebuild your repo 
+## if you want to burn and rebuild your repo, uncomment below
+#
 #echo "Burning Repo..."
-#svn rm    $REPO/{trunk,tags,branches} -m "Burning..." 
+#svn rm    $REPO/{trunk,tags,branches} -m "Burning..."
 
 #echo "Rebuilding Repo...."
-#svn mkdir $REPO/{trunk,tags,branches} -m "Rebuilding..." 
+#svn mkdir $REPO/{trunk,tags,branches} -m "Rebuilding..."
 
 # cleanup
 find -maxdepth 1 -type d ! -name '.*' |xargs rm -rf; # tmp
@@ -31,7 +33,7 @@ GIT_FOLDER=`pwd`"/git"
 
 
 # revs
-ENDREV=`svn info $URL |grep Revision: | awk '{print $2}'`
+ENDREV=`svn info $URL |grep Revision: |awk '{print $2}'`
 CURREV=1
 
   mkdir -p $SVN_FOLDER $GIT_FOLDER
@@ -64,24 +66,24 @@ echo -e "\nDownloading GIT repo\n"
 
       # copy new files
       for i in $ADD
-      do 
+      do
          cp --parents $i $SVN_FOLDER/
       done
 
 
       # copy modified files
       for i in $MOD
-      do 
+      do
          cp --parents $i $SVN_FOLDER/
       done
 
 
     # set opts for SVN logging
     HASH=$(git log -1 --pretty=format:'Hash: %h <%H>')
-    AUTHOR='Jd Daniel <jdaniel@erado.com>'  # or $(git log -1 --pretty="%cn <%cE>")
+    AUTHOR='Jd Daniel <dodomeki@gmail.com>'  # or $(git log -1 --pretty="%cn <%cE>")
 
     TMPDATE=$(git log -1 --pretty=%ad --date=iso8601)
-    DATE=$(date --date "$TMPDATE" -u +"%Y-%m-%dT%H:%M:%S.%N" | sed 's/.....$/Z/g')
+    DATE=$(date --date "$TMPDATE" -u +"%Y-%m-%dT%H:%M:%S.%N" |sed 's/.....$/Z/g')
 
     LOGMSG=$(git log -1 --pretty=%s)
 
@@ -92,7 +94,7 @@ echo -e "\nDownloading GIT repo\n"
     # burn file if it exists....
     if [ "$DEL" != "" ]; then
       for i in $DEL
-      do 
+      do
          test -f $i && svn --force rm $i
       done
     fi
@@ -120,6 +122,5 @@ echo -e "\nDownloading GIT repo\n"
     svn propset --revprop -r HEAD svn:date   "$DATE"
 
   done
-
 
 exit
