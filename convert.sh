@@ -1,7 +1,7 @@
 #!/bin/bash
 function ConvertToMp4() {
   if [ "x$1" != "x" ] ; then
-    cd $1
+    cd "${1}"
   fi
 
   for file in *.flv ; do
@@ -11,4 +11,5 @@ function ConvertToMp4() {
     rm -f "$file" #housecleaning
   done
 }
+
 ConvertToMp4 "$1"
