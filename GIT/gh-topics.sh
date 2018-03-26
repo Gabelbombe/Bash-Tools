@@ -4,7 +4,7 @@
 # CPR : Jd Daniel :: Ehime-ken
 # MOD : 2018-03-26 @ 13:14:54
 # REF : goo.gl/eSMM17
-# VER : Version 1.0.5
+# VER : Version 1.0.1
 
 # REQ : Bash 4.3+
 
@@ -19,21 +19,20 @@ declare     repos=''
 function print_usage()
 {
   echo -e '
-  Parameter usage: git-backup.sh [--help] [--token=<mfa-token>] [--org=<git-organisation>] [--user=<github-username>] [--pass=<github-password>] [--file=<filename>] [--term=<keyword-match>]
+  Parameter usage: git-backup.sh [--help] [--token=<mfa-token>] [--org=<git-organisation>] [--user=<github-username>] [--pass=<github-password>]  [--term=<keyword-match>]
 
   Parameters:
   -o  --org   Github organisation conencting to
-  -f  --file  File to locate in repositories
-  -t  --term  Search term to match in file
   -u  --user  Github username for API connection
   -p  --pass  Github password for API connection
   -m  --mfa   Github MFA token if used/required
+  -t  --term  Search term to match in file
 
   Example usage:
-  gh-search.sh -u ehime -p "secure pass/token" --mfa 000000 \
-    --org github                                            \
-    --file README\.md                                       \
-    --term "GNU Public License"
+  gh-search.sh -u ehime -p "secure pass/token"  \
+    --mfa 000000                                \
+    --org github                                \
+    --term platform
   '
 }
 
@@ -52,7 +51,6 @@ else
       "-u"|"--user"       ) user="$1" ; shift   ;;
       "-p"|"--pass"       ) pass="$1" ; shift   ;;
       "-m"|"--mfa"        ) mfa="$1"  ; shift   ;;
-      "-f"|"--file"       ) file="$1" ; shift   ;;
       "-t"|"--term"       ) term="$1" ; shift   ;;
 
       # File and Term need to be included
@@ -63,20 +61,18 @@ fi
 
 ## gewaltenteilung
 [[ -z "$org" ]]   && { echo "=> [GitHub Organization]  (-o|--org) cannot remain empty"  >&2 ; exit 1 ; }
-[[ -z "$file" ]]  && { echo "=> [GitHub File]          (-f|--file) cannot remain empty" >&2 ; exit 1 ; }
-[[ -z "$term" ]]  && { echo "=> [Search Term]          (-t|--term) cannot remain empty" >&2 ; exit 1 ; }
 
 
 ## Unset usage from global scope
 unset -f print_usage
 
-CURL="curl --silent -u \"$user:$pass\""
+CURL="curl --silent -u \"$user:$pass\" -H \"Accept: application/vnd.github.mercy-preview+json\""
 
 [ "${mfa}z" != "z" ] && {
   CURL="$CURL -H \"Authorization: token ${mfa}\""
 }
 
-
+#echo -e "CMD is: ${CURL}"
 while true ; do
   test="$(eval $CURL -X GET https://api.github.com/orgs/$org/repos?page=$incrm |jq -r '.[] .ssh_url')"
 
@@ -93,34 +89,20 @@ echo ; unset incrm ## clean
   ## set count && decr
   total=$(echo "${repos}" |wc -l) ; decr=$total
 
-tmpdir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
-cd $tmpdir
-
-  echo "Created: ${tmpdir} for operations.."
-
+echo >| output.log ## nuke n' pave
 
 ## cycling through capture list
 for repo in ${repos} ; do
   name="$(echo ${repo} |sed -e 's:.*/::' -e 's/\.[^.]*$//')"
-  echo -e "Process: [$((decr--))/${total}] ${name}"
 
-  git clone -q $repo \
-  && cd "${name}"
+    echo -e "Process: [$((decr--))/${total}] ${name}"
 
-  ## does it even exist?
-  capture='' ; capture=$(find . -type f -name "${file}")
-  [ "${capture}z" != 'z' ] && {
+  output=$(eval $CURL -X GET "https://api.github.com/repos/$org/$name/topics")
+  query="jq '.names | contains([\"$term\"])'"
 
-      IFS=' ' read -r -a files <<< "$capture"
-      for name in "${files[@]}" ; do
-        echo -e "Located: ${name}"
-        grep -n -Iir "${term}" $(echo $name |sed -e 's/..//')
-      done
-
-    echo -e '' ## gimme some space
+  [ 'true' == $(echo $output |eval $query) ] && {
+    echo $output |sed -e "s/names/$name/"
+    echo $name   >> output.log
   }
 
-  cd $tmpdir && rm -fr "${name}"
 done
-
-rm -fr "$tmpdir"
