@@ -1,5 +1,5 @@
 #!/usr/local/bin/bash
-# ORG search script
+# ORG File search script
 
 # CPR : Jd Daniel :: Ehime-ken
 # MOD : 2018-03-26 @ 13:14:54

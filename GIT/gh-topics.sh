@@ -1,9 +1,9 @@
 #!/usr/local/bin/bash
-# ORG search script
+# ORG Topics search script
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2018-03-26 @ 13:14:54
-# REF : goo.gl/eSMM17
+# MOD : 2018-03-26 @ 16:28:55
+# REF : goo.gl/FQCHNP
 # VER : Version 1.0.1
 
 # REQ : Bash 4.3+
