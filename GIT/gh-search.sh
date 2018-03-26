@@ -3,7 +3,7 @@
 
 # CPR : Jd Daniel :: Ehime-ken
 # MOD : 2018-03-26 @ 13:14:54
-# REF : goo.gl/KuJbh1
+# REF : goo.gl/eSMM17
 # VER : Version 1.0.5
 
 # REQ : Bash 4.3+
