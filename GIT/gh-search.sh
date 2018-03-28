@@ -115,11 +115,12 @@ for repo in ${repos} ; do
   capture='' ; capture="$(eval $SEARCH)"
   echo "$capture" | while read name ; do
     name=$(echo $name |sed -e 's/..//')
-    echo -e "Found: ${name}"
-    grep -n -Ii "${term}" "${name}"
+    grep -n -HIi "${term}" "${name}"
+
+      [ 1 = $? ] && echo ## spaceout
   done
 
-  echo ; cd $tmpdir \
+  cd $tmpdir \
   && rm -fr "${name}"
 done
 
