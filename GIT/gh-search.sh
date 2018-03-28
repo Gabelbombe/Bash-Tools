@@ -107,14 +107,19 @@ for repo in ${repos} ; do
   git clone -q $repo \
   && cd "${name}"
 
+  SEARCH="find . -type f -name \"${file}\""
+  [ "${term}x" = '*x' ] && {
+    SEARCH='find . -type f |grep -v "\.git/"'
+  }
+
   ## does it even exist?
-  capture='' ; capture=$(find . -type f -name "${file}")
+  capture='' ; capture=$(eval $SEARCH)
   [ "${capture}z" != 'z' ] && {
 
       IFS=' ' read -r -a files <<< "$capture"
       for name in "${files[@]}" ; do
-        echo -e "Located: ${name}"
-        grep -n -Iir "${term}" $(echo $name |sed -e 's/..//')
+        echo -e "\tLocated: ${name}"
+        grep -n -Ii "${term}" $(echo $name |sed -e 's/..//')
       done
 
     echo -e '' ## gimme some space
