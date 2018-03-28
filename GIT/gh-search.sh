@@ -108,24 +108,19 @@ for repo in ${repos} ; do
   && cd "${name}"
 
   SEARCH="find . -type f -name \"${file}\""
-  [ "${term}x" = '*x' ] && {
+  [ "${file}x" = '*x' ] && {
     SEARCH='find . -type f |grep -v "\.git/"'
   }
 
-  ## does it even exist?
-  capture='' ; capture=$(eval $SEARCH)
-  [ "${capture}z" != 'z' ] && {
+  capture='' ; capture="$(eval $SEARCH)"
+  echo "$capture" | while read name ; do
+    name=$(echo $name |sed -e 's/..//')
+    echo -e "Found: ${name}"
+    grep -n -Ii "${term}" "${name}"
+  done
 
-      IFS=' ' read -r -a files <<< "$capture"
-      for name in "${files[@]}" ; do
-        echo -e "\tLocated: ${name}"
-        grep -n -Ii "${term}" $(echo $name |sed -e 's/..//')
-      done
-
-    echo -e '' ## gimme some space
-  }
-
-  cd $tmpdir && rm -fr "${name}"
+  echo ; cd $tmpdir \
+  && rm -fr "${name}"
 done
 
 rm -fr "$tmpdir"
