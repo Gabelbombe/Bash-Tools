@@ -2,8 +2,8 @@
 # ORG Deep file search script
 
 # CPR : Jd Daniel :: Ehime-ken
-# MOD : 2018-03-26 @ 13:14:54
-# VER : Version 1.0.0
+# MOD : 2018-05-21 @ 18:32:26
+# VER : Version 1.0.1
 
 # USE : ./gh-deepsearch.sh -u $GH_USER -o d3sw -m $GH_TOKEN -f 'deploy.tmpl.nomad' -r 'value.*=.*test.'
 # REQ : Bash 4.3+
