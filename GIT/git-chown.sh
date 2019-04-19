@@ -24,6 +24,8 @@ function sign()
   git push -f ; echo
 }
 
+echo -e "\n\nGo grab a beer, this will take... awhile...\n\n"
+
 for tag in $(git tag |awk '{print$1}') ; do
   echo -e "\nOperating on: $tag"
   chown "$1" "$2"
