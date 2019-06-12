@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/bash -x
 # Youtube to MP3 Bash Script
 
 CPR='Jd Daniel :: Ehime-ken'
 MOD=$(date +"%Y-%m-%d @ %H:%M:%S")
-VER='7.0.2'
+VER='7.0.3'
 
 # REF : https://github.com/ehime/Bash-Tools/blob/master/TOYS/y2m.sh
 # REQ : http://developer.echonest.com/docs/v4/song.html
@@ -11,9 +11,9 @@ VER='7.0.2'
 
 # Reading tags via: brew install eyed3
 # $ eyeD3 Black\ Rebel\ Motorcycle\ Club\ -\ Red\ Eyes\ And\ Tears.mp3
-# Black Rebel Motorcycle Club - Red Eyes And Tears.mp3	[ 8.09 MB ]
+# Black Rebel Motorcycle Club - Red Eyes And Tears.mp3    [ 8.09 MB ]
 # -------------------------------------------------------------------------------
-# Time: 03:58	MPEG1, Layer III	[ ~283 kb/s @ 44100 Hz - Joint stereo ]
+# Time: 03:58    MPEG1, Layer III    [ ~283 kb/s @ 44100 Hz - Joint stereo ]
 # -------------------------------------------------------------------------------
 # ID3 v2.3:
 # title: Red Eyes And Tears
@@ -71,7 +71,7 @@ while getopts 'v:d:t:i:-:' OPT; do
       ;;
 
       flush) echo "[info] Flushing caches..."
-             youtube-dl --rm-cache-dir
+             youtube-dl --no-check-certificate --rm-cache-dir
              exit
       ;;
 
@@ -125,7 +125,7 @@ regex='v=(.*)'
   ## get/set thumbnail for MP3
   if [[ "x$image" == "x" && ! -f "${image}" ]] ; then
     echo "[info] Downloading thumbnail"
-    youtube-dl $debug --no-warnings --write-thumbnail $address -o thumbnail.jpg
+    youtube-dl --no-check-certificate $debug --no-warnings --write-thumbnail $address -o thumbnail.jpg
   else
     echo "[info] Using ${image} as thumbail"
     cp -ir "${image}" thumbnail.jpg
@@ -134,19 +134,19 @@ regex='v=(.*)'
 
   ## if you haven't defined a title....
   [ "x$video_title" == "x" ] && {
-    video_title="$(youtube-dl $debug --no-warnings --get-title $address |sed s/://g)"
+    video_title="$(youtube-dl --no-check-certificate $debug --no-warnings --get-title $address |sed s/://g)"
   }
 
   echo "[info] Title is: ${video_title}"
 
 
   # download the FLV stream
-  youtube-dl $debug --no-warnings -o "$video_title" $address
+  youtube-dl --no-check-certificate $debug --no-warnings -o "$video_title" $address
 
 
   ## TODO: Add API lookup via Echonest
-  artist="$(echo $video_title |awk -F '-' '{print$1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
-  title="$(echo $video_title  |awk -F '-' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
+  artist="$(echo $video_title |awk -F ' - ' '{print$1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
+  title="$(echo $video_title  |awk -F ' - ' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
   video=$(ls |grep "${artist}") ## format independant, might need: head -n1, also hates ( ) [ ] etc
 
   echo "[info] Using Video: ${video}"
@@ -169,10 +169,10 @@ regex='v=(.*)'
        --tt "${title}"                                      \
        --tv "TPE2=${artist}"                                \
        --tc "${COMMENTS}"                                   \
-       "$video_title".mp3 "${dir}/${video_title}.mp3"
+   "$video_title".mp3 "${dir}/${video_title}.mp3"
 
 
-  rm -f *.{webm,mp4,flv,mp3,jpg}
+  rm -f /tmp/*.{webm,mp4,flv,mp3,jpg,mkv} ##oikology
 } || {
   echo "You fucked up..."
 }
