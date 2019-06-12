@@ -3,7 +3,7 @@
 
 CPR='Jd Daniel :: Ehime-ken'
 MOD=$(date +"%Y-%m-%d @ %H:%M:%S")
-VER='7.0.3'
+VER='7.0.4'
 
 # REF : https://github.com/ehime/Bash-Tools/blob/master/TOYS/y2m.sh
 # REQ : http://developer.echonest.com/docs/v4/song.html
@@ -24,8 +24,8 @@ VER='7.0.3'
 # Comment: [Description: ] [Lang: XXX]
 #
 # CPR: Jd Daniel :: Ehime-ken
-# MOD: 2016-01-14 @ 09:34:34
-# VER: Version 7.0.2 (OSX Maverick)
+# MOD: 2019-06-12 @ 13:29:46
+# VER: Version 7.0.4 (OSX Maverick)
 # REF: https://www.youtube.com/watch?v=kOdHND_wt0k
 #
 # OTHER Image: [Size: 15747 bytes] [Type: image/jpeg]
@@ -62,7 +62,7 @@ while getopts 'v:d:t:i:-:' OPT; do
 
       help) echo 'Long:  y2m -d {directory} -v {ex: http://www.youtube.com/watch?v=oHg5SJYRHA0‎}'
             echo 'Short: y2m {ex: http://www.youtube.com/watch?v=oHg5SJYRHA0‎}'
-            exit
+            return
       ;;
 
       ## continues with argv[2] as address...
@@ -72,10 +72,10 @@ while getopts 'v:d:t:i:-:' OPT; do
 
       flush) echo "[info] Flushing caches..."
              youtube-dl --no-check-certificate --rm-cache-dir
-             exit
+             return
       ;;
 
-      version) echo "$VER" ; exit
+      version) echo "$VER" ; return
 
     esac;;
   esac
@@ -93,7 +93,7 @@ function ere_quote () {
 [ "x$dir" == "x" ]     && { dir="/Users/${USER}/Music/" ; }
 
 ## dir exists?
-[ ! -d "${dir}" ]      && { echo "[error] Directory '${dir}' does not not exist..." ; exit 1 ; }
+[ ! -d "${dir}" ]      && { echo "[error] Directory '${dir}' does not not exist..." ; return 1 ; }
 
 ## set comments
 COMMENTS="
