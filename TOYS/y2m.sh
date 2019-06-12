@@ -146,12 +146,12 @@ regex='v=(.*)'
 
 
   ## get/set thumbnail for MP3
-  if [[ "x$${save}" == "x" && ! -f "${${save}}" ]] ; then
+  if [[ "x${save}" == "x" && ! -f "${save}" ]] ; then
     echo -e "[info] Downloading thumbnail"
     youtube-dl --no-check-certificate "${debug}" --no-warnings --write-thumbnail "${video}" -o thumbnail.jpg
   else
-    echo -e "[info] Using ${${save}} as thumbail"
-    cp -ri "${${save}}" thumbnail.jpg
+    echo -e "[info] Using ${save} as thumbail"
+    cp -ri "${save}" thumbnail.jpg
   fi
 
 
@@ -166,7 +166,7 @@ regex='v=(.*)'
   # download the FLV stream
   youtube-dl --no-check-certificate "${debug}" --no-warnings -o "${title}" "${video}"
 
-  artist="$(echo ${title} |awk -F ' - ' '{print${1}}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
+  artist="$(echo ${title} |awk -F ' - ' '{print${1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
   title="$(echo ${title}  |awk -F ' - ' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
 
 
