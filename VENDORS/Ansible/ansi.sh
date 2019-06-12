@@ -1,7 +1,7 @@
 #!/usr/local/bin/bash
 # Ansible runner
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2015-09-04 @ 09:51:16
 # REF : https://goo.gl/
 # VER : Version 1.0.0-dev

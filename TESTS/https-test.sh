@@ -1,7 +1,7 @@
 #!/bin/bash
 # Test for SSL verified site
  
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2013-11-11 @ 11:23:30
 # INP : $ ./https-test.sh {optional: domain.com}
 

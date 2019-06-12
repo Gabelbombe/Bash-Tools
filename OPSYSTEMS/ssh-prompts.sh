@@ -1,7 +1,7 @@
 #!/bin/bash
 # Detects if server accepts connections
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2015-09-04 @ 09:51:16
 # REF : https://goo.gl/a5ZUqx
 # VER : Version 1.0.1-dev

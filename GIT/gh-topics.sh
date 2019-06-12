@@ -1,7 +1,7 @@
 #!/usr/local/bin/bash
 # ORG Topics search script
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2018-03-26 @ 16:28:55
 # REF : goo.gl/FQCHNP
 # VER : Version 1.0.1
@@ -29,7 +29,7 @@ function print_usage()
   -t  --term  Search term to match in file
 
   Example usage:
-  gh-search.sh -u ehime -p "secure pass/token"  \
+  gh-search.sh -u Gabelbombe -p "secure pass/token"  \
     --mfa 000000                                \
     --org github                                \
     --term platform

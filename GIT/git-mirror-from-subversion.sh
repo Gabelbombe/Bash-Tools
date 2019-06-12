@@ -1,7 +1,7 @@
 #!/usr/local/env bash
 # Converter for GitHub to Subversion Repositories
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2017-01-26 @ 19:33:59
 # VER : Version 1c
 

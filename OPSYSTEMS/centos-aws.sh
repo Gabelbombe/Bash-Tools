@@ -1,7 +1,7 @@
 #!/bin/bash
 # Setup a blank Centos 6.4 Development server
  
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2014-05-08 @ 09:59:25
 # INP : $ ./centos-aws.sh
 

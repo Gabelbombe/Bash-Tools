@@ -1,7 +1,7 @@
 #!/bin/bash
 # test a site accepts and connects on SSL/443
  
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2013-11-21 @ 15:36:04
 
 # old buggy way for reference =/

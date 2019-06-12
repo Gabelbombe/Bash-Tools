@@ -1,7 +1,7 @@
 #!/bin/bash
 # Dump cronjobs for all users
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2015-04-20 @ 09:25:24
 # VER : Version 1.1
 # SYS : Working for Debian and RHEL

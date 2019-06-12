@@ -1,7 +1,7 @@
 #!/bin/bash
 # CRONTAB to run WARC repository generator
  
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2013-10-08 @ 09:22:55
 
 # INP : $1 System type (rhel|deb)

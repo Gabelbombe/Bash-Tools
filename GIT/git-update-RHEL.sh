@@ -1,7 +1,7 @@
 #!/bin/bash
 # Git updater for RHEL systems
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2013-11-18 @ 10:29:06
 
 # REF : http://goo.gl/ditKWu

@@ -1,7 +1,7 @@
 #!/bin/bash
 # EPEL (Extra Package Library) Installer for RHEL based systems
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2014-11-20 @ 14:00:34
 # INP : ./git-installer.sh
 

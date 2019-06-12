@@ -72,7 +72,7 @@ Default output format: (Enter "text".)```
 **Install Script**: Download the latest version of the snapshot script and make it executable:
 ```
 cd ~
-wget https://raw.githubusercontent.com/ehime/Bash-Tools/master/AWS/ebs-backup.sh
+wget https://raw.githubusercontent.com/Gabelbombe/Bash-Tools/master/AWS/ebs-backup.sh
 chmod +x ebs-backup.sh
 mkdir -p /opt/aws
 sudo mv ebs-backup.sh /opt/aws/

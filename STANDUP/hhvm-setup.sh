@@ -1,7 +1,7 @@
 #!/bin/bash
 # HipHop VM installer for Ubuntu 14.04 x64 LTS
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2015-01-12 @ 14:28:11
 # VER : Version 2
 

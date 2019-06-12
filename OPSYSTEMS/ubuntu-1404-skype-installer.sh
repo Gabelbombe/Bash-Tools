@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Installs Skype
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2014-04-22 @ 14:04:08
 
 # ROOT check

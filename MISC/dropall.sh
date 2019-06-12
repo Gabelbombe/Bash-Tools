@@ -1,7 +1,7 @@
 #!/bin/bash
 # Recursive file deletion
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2015-09-04 @ 09:21:03
 # REF : https://goo.gl/bHkuWG
 # VER : Version 1.0.1-dev

@@ -1,7 +1,7 @@
 #!/bin/bash
 # GIT ACL Facade
 #
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2014-12-08 @ 12:59:01
 # VER : 1a
 

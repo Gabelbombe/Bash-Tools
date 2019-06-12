@@ -1,5 +1,5 @@
 #!/bin/bash
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2014-04-04 @ 13:13:29
 # VER : 1.0
 #

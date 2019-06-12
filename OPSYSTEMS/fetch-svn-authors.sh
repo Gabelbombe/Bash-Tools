@@ -1,7 +1,7 @@
 #!/bin/bash
 # Convert GitHub->SVN Repos
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2009-01-27 @ 11:25:06
 # VER : Version 2.1.6b
 

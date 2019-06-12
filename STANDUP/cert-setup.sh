@@ -1,7 +1,7 @@
 #!/bin/bash
 # Self-Signed SSL Certificate with Apache
 #
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2014-06-16 @ 11:48:48
 # VER : 1a
 

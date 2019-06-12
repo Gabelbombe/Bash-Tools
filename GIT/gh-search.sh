@@ -1,7 +1,7 @@
 #!/usr/local/bin/bash
 # ORG File search script
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2018-03-26 @ 13:14:54
 # REF : goo.gl/eSMM17
 # VER : Version 1.0.5
@@ -30,7 +30,7 @@ function print_usage()
   -m  --mfa   Github MFA token if used/required
 
   Example usage:
-  gh-search.sh -u ehime -p "secure pass/token" --mfa 000000 \
+  gh-search.sh -u Gabelbombe -p "secure pass/token" --mfa 000000 \
     --org github                                            \
     --file README\.md                                       \
     --term "GNU Public License"

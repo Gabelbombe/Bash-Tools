@@ -1,7 +1,7 @@
 #!/usr/local/bin/bash
 # ORG Deep file search script
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2018-05-21 @ 18:32:26
 # VER : Version 1.0.1
 
@@ -36,7 +36,7 @@ function print_usage()
   -m  --mfa     Github MFA token if used/required
 
   Example usage:
-  gh-search.sh -u ehime -p "secure pass/token" --mfa 000000 \
+  gh-search.sh -u Gabelbombe -p "secure pass/token" --mfa 000000 \
     --org    github                                         \
     --file   deploy\.tmpl\.nomad                            \
     --regexp "value.*=.*test."

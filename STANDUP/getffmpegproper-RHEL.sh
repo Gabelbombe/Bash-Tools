@@ -1,7 +1,7 @@
 #!/bin/bash
 # RPM ffmpeg installer
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2013-25-06 @ 10:45:38
 
 # $ ./getffmpegproper-arch

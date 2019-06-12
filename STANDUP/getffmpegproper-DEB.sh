@@ -1,5 +1,5 @@
 #!/bin/bash
-# CPR : Jd Daniel :: Ehime-ken# 
+# CPR : Jd Daniel :: Gabelbombe# 
 # getffmpegproper
 # this sctipt downloads, install and update ffmpeg and x264 from SVN and git for the initial install
 

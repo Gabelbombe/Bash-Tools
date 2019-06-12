@@ -1,7 +1,7 @@
 #!/bin/bash
 # MongoDB installer for PHP && DEB based servers
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2013-10-28 @ 09:40:20
 # VER : Version 1.05.1
 

@@ -1,7 +1,7 @@
 #!/usr/local/bin/bash
 # ORG backup script
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2015-08-05 @ 12:06:32
 # REF : https://goo.gl/Z38oBh
 # VER : Version 1.2.0-dev
@@ -27,9 +27,9 @@ function print_usage()
   -p  --pass  Github password for API connection
 
   Example usage:
-  git-backup.sh -u ehime -p "secure password" \
-  -f git@github.com:ehime/Bash-Tools.git      \
-  -t git@github.com:ehime/Cold-Storage.git
+  git-backup.sh -u Gabelbombe -p "secure password" \
+  -f git@github.com:Gabelbombe/Bash-Tools.git      \
+  -t git@github.com:Gabelbombe/Cold-Storage.git
   '
 }
 

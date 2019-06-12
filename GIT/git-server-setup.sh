@@ -1,12 +1,12 @@
 #!/bin/bash
 # Git server setup for DEB/RHEL systems
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2014-06-20 @ 11:32:41
 # VER : Version 1.4.0
 
 ## Run:
-## cd /tmp && wget https://raw.githubusercontent.com/ehime/Bash-Tools/master/git-server-setup.sh
+## cd /tmp && wget https://raw.githubusercontent.com/Gabelbombe/Bash-Tools/master/git-server-setup.sh
 ## sudo chmod a+x git-server-setup.sh && sudo bash git-server-setup.sh
 
 # functions
@@ -92,7 +92,7 @@ echo -e "Done!"
 \BLUE "Adding interactive GIT-Shell commands"
 
   # /home/git/git-shell-commands should exist and have read and execute access.
-  git clone https://github.com/ehime/git-commands.git /home/git/git-shell-commands
+  git clone https://github.com/Gabelbombe/git-commands.git /home/git/git-shell-commands
 
 \BLUE "Locking GIT user"
 
@@ -109,7 +109,7 @@ echo -e "Locked."
   majmin=$(git --version | awk '{ print $3 }' | awk -F'.' '{print $2$3}') 
   if [ $major < 74 ]; then
 
-  cd /tmp && wget https://raw.github.com/ehime/bash-tools/master/git-update-RHEL.sh
+  cd /tmp && wget https://raw.github.com/Gabelbombe/bash-tools/master/git-update-RHEL.sh
   chmod +x git-update-RHEL.sh 
 
   bash git-update-RHEL.sh # run it

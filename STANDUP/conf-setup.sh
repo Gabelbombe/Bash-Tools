@@ -1,7 +1,7 @@
 #!/bin/bash
 # Development server setup
  
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2014-07-14 @ 11:01:30
 
 # INP : $ ./setup.sh

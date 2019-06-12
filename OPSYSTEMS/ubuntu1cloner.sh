@@ -2,7 +2,7 @@
 # Cloning tool that will move all your synced Ubuntu One music to your real music folder
 # Folder MUST exist first otherwise it will be ignored, will rename your track cuz U1 is dumb
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2013-11-09 @ 17:02:54
 # VER : Version 1
 

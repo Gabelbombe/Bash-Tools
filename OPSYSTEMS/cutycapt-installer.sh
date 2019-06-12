@@ -1,7 +1,7 @@
 #!/bin/bash
 # CutyCapt installer
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2013-11-05 @ 11:14:36
 # VER : Version 2
 
