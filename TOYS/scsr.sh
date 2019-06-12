@@ -1,13 +1,13 @@
 #!/bin/bash
 # SoundCloud Stripper Bash Script
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2013-11-05 @ 11:14:36
 # VER : Version 1
 
 # REF : http://pastebin.com/QHQeNRZM
 
-echo "[i] SoundCloud.com stream stripper by Ehime-ken";
+echo "[i] SoundCloud.com stream stripper by Gabelbombe";
  
 if [ -z "$1" ]; then
     echo -e "\n[i] Usage: `basename $0` http://soundcloud.com/link_with_tracks_on_page\n" ; exit

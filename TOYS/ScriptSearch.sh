@@ -1,7 +1,7 @@
 #!/bin/bash
 # Search between tags down a directory tree
  
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2014-07-14 @ 12:25:19
 
 # INP : $ ./ScripSearch.sh noscript "/path/to/dir"

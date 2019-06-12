@@ -1,7 +1,7 @@
 #!/bin/bash
 # Video transcoder
 #
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2014-02-24 @ 16:34:29
 # VER : Beta 3
 

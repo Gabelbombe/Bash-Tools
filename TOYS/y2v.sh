@@ -1,7 +1,7 @@
 #!/bin/bash
 # Youtube to Video Bash Script
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2013-22-07 @ 12:01:20
 # VER : Version 3
 

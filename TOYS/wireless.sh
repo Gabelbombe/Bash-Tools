@@ -2,7 +2,7 @@
 # Review and Remove Wireless Access Points on DEB based Systems
 # Make sure to place script in /usr/local/bin 
 
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2013-12-09 @ 12:27:02
 
 # INP : $ wireless -{flag} {arg}
@@ -70,7 +70,7 @@ function version ()
   echo -e "\n\twireless (GNU wireless network purge) v${VERSION}"
   echo -e "\n\tCopyright (C) 2013 Hydra Code, LLC."
   echo -e "\tLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n\tThis is free software: you are free to change and redistribute it.\n\tThere is NO WARRANTY, to the extent permitted by law."
-  echo -e "\n\n\tWritten by Jd Daniel (Ehime-ken) http://github.com/ehime"
+  echo -e "\n\n\tWritten by Jd Daniel (Gabelbombe) http://github.com/Gabelbombe"
   exit 0
 }
 

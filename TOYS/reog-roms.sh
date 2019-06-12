@@ -1,12 +1,12 @@
 #!/bin/bash
 # Organize ROM files based on country codes
  
-# CPR : Jd Daniel :: Ehime-ken
+# CPR : Jd Daniel :: Gabelbombe
 # MOD : 2014-11-13 @ 20:49:01
 
 # INP : $ ./reorg-roms.sh
 
-dir='/home/ehime/Downloads/GBA ROMs'
+dir='/home/Gabelbombe/Downloads/GBA ROMs'
 cd "$dir"
 
 for file in *; do
