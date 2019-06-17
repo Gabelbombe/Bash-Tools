@@ -61,7 +61,7 @@ else
     case "${opt}" in
       "-t"|"--title"      ) title="${1}" ; shift ;;
       "-v"|"--video"      ) video="${1}" ; shift ;;
-      "-c"|"--cover"      ) ${save}="${1}" ; shift ;;
+      "-c"|"--cover"      ) cover="${1}" ; shift ;;
       "-s"|"--save"       ) save="${1}"  ; shift ;;
 
       ## version out...
@@ -134,7 +134,7 @@ regex='v=(.*)'
 
   ## argsmap
   video_id="${BASH_REMATCH[1]}"
-  video_id="$(echo $video_id| cut -d'&' -f1)"
+  video_id="$(echo ${video_id}| cut -d'&' -f1)"
   filename=$(basename "${FILEPATH}")
   extension="${filename##*.}"
 
@@ -146,12 +146,12 @@ regex='v=(.*)'
 
 
   ## get/set thumbnail for MP3
-  if [[ "x${save}" == "x" && ! -f "${save}" ]] ; then
+  if [[ "x${cover}" == "x" && ! -f "${cover}" ]] ; then
     echo -e "[info] Downloading thumbnail"
     youtube-dl --no-check-certificate "${debug}" --no-warnings --write-thumbnail "${video}" -o thumbnail.jpg
   else
-    echo -e "[info] Using ${save} as thumbail"
-    cp -ri "${save}" thumbnail.jpg
+    echo -e "[info] Using ${cover} as thumbail"
+    cp -ri "${cover}" thumbnail.jpg
   fi
 
 
