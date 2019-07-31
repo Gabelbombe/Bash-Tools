@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/usr/local/bin/bash -x
 # Youtube to MP3 BASH script to steal shit...
 
 CPR='Jd Daniel :: Gabelbombe'
@@ -39,12 +39,12 @@ function print_usage()
   '
 }
 
-## following requires modern GNU bash 3.2 you loser....
+## following requires modern GNU bash 4.4 you loser....
 if (shopt -s nocasematch ; [[ ${1} = @(-h|--help) ]]) ; then
   print_usage ; return 1
 
 ## because you're a lazy cunt...
-elif [[ [[ "${1}" =~ $isurl ]] ; then
+elif [[ "${1}" =~ $isurl ]] ; then
   title="${1}"
 
 else
@@ -78,11 +78,12 @@ else
       "--flush"           ) echo -e "[info] Flushing caches..."
                             youtube-dl --no-check-certificate --rm-cache-dir
                             return 1
+                          ;;
 
       "--update"          ) echo -e "[info] Force updating youtube-dl..."
                             sudo youtube-dl -U
                             return 1
-
+                          ;;
 
       ## you sir, just boiled the fuckin ocean..
       *                   ) echo -e "[fatal] Invalid option: \""$opt"\"" >&2
