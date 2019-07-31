@@ -54,9 +54,9 @@ else
     ## no one likes a smart-ass....
     current_arg="${1}"
 
-    if [[ "${current_arg}" =~ ^-{0,1}.* ]] ; then
-      echo -e "[fatal] The Universe doesn't give a fuck about your feelings..."
-    fi
+    # if [[ "${current_arg}" =~ ^-{0,1}.* ]] ; then
+    #   echo -e "[fatal] The Universe doesn't give a fuck about your feelings..."
+    # fi
 
     case "${opt}" in
       "-t"|"--title"      ) title="${1}" ; shift ;;
@@ -167,7 +167,7 @@ regex='v=(.*)'
   # download the FLV stream
   youtube-dl --no-check-certificate "${debug}" --no-warnings -o "${title}" "${video}"
 
-  artist="$(echo ${title} |awk -F ' - ' '{print${1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
+  artist="$(echo ${title} |awk -F ' - ' '{print$1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
   title="$(echo ${title}  |awk -F ' - ' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
 
 
