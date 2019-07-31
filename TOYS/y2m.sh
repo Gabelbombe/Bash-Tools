@@ -3,7 +3,7 @@
 
 CPR='Jd Daniel :: Gabelbombe'
 MOD="$(date +'%Y-%m-%d @ %H:%M:%S')"
-VER='7.1.4'
+VER='7.1.5'
 
 # REF : https://github.com/Gabelbombe/Bash-Tools/blob/master/TOYS/y2m.sh
 # REQ : https://github.com/aadsm/JavaScript-ID3-Reader
@@ -123,28 +123,26 @@ function ere_quote () {
 
 echo -e "[info] Using directory: ${save}"
 
-regex='v=(.*)'
 
+regex='v=(.*)'
 [[ ${video} =~ ${regex} ]] && {
 
   ## argsmap
   video_id="${BASH_REMATCH[1]}"
   video_id="$(echo ${video_id}| cut -d'&' -f1)"
 
-
   ## set comments
   declare COMMENTS="
-  [CPR] ${CPR}
-  [MOD] ${MOD}
-  [VER] ${VER}
-  [REF] ${video_id}
-  "
+[CPR] ${CPR}
+[MOD] ${MOD}
+[VER] Y2: ${VER}
+[REF] YT: ${video_id}
+"
 
   ## remove thumb if exists
   [ -f 'thumbnail.jpg' ] && {
     rm -f 'thumbnail.jpg'
   }
-
 
   ## get/set thumbnail for MP3
   if [[ "x${cover}" == "x" && ! -f "${cover}" ]] ; then
@@ -162,7 +160,7 @@ regex='v=(.*)'
 
   echo -e "[info] Title is: ${title}"
 
-  # download the FLV stream
+  ## download the FLV stream
   youtube-dl --no-check-certificate ${debug} --no-warnings -o "${title}" ${video}
 
   artist="$(echo ${title} |awk -F ' - ' '{print$1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"

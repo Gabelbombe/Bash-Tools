@@ -1,0 +1,199 @@
+[info] Querying for repositories with deploy.tmpl.nomad in path
+[info] Searching forked repositories
+[info] Merging forked repositories with deploy.tmpl.nomad in path
++ conductor
++ hashi-ui
++ iris-ui
+[info] Created: /var/folders/52/lk6t6r_54yd_lt4c95h76svh0000gn/T/tmp.6BrzLgcZ8I for operations..
+Process: [112/112] apex
+Process: [111/112] asset-registration-service
+Process: [110/112] atlas
+Process: [109/112] auth
+Process: [108/112] biztalk-proxy
+Process: [107/112] checksum
++ Found in branch: HEAD
++ Found in branch: master
++ Found in branch: uri-format
+Process: [106/112] chronograf
+Process: [105/112] conductor
+Process: [104/112] conductor-copy
++ Found in branch: HEAD
++ Found in branch: Waittaskfix
++ Found in branch: deluxedev
++ Found in branch: httpwaittask
++ Found in branch: master
++ Found in branch: ren_serviceDiscovery
++ Found in branch: vipadressfix
+Process: [103/112] conductor-devtest
+Process: [102/112] conductor-initializer
++ Found in branch: HEAD
++ Found in branch: ONECOND-280
++ Found in branch: ONECOND-335
++ Found in branch: ONECOND-343
++ Found in branch: ONECOND-358
++ Found in branch: ONECOND-359
++ Found in branch: ONECOND-364
++ Found in branch: ONECOND-376
++ Found in branch: ONECOND-379
++ Found in branch: ONECOND-380
++ Found in branch: ONECOND-389
++ Found in branch: ONECOND-390
++ Found in branch: ONECOND-391
++ Found in branch: ONECOND-392
++ Found in branch: ONECOND-395
++ Found in branch: ONECOND-397
++ Found in branch: OWCON-284
++ Found in branch: OWCOND-244
++ Found in branch: OWCOND-257
++ Found in branch: OWCOND-290
++ Found in branch: OWCOND-298
++ Found in branch: OWCOND-300
++ Found in branch: OWCOND-301
++ Found in branch: OWCOND-306
++ Found in branch: OWCOND-328
++ Found in branch: OWCOND-352
++ Found in branch: dev
++ Found in branch: heajuenhwang-patch-1
++ Found in branch: itunedeliveryrelease032018
++ Found in branch: liverelease052218
++ Found in branch: master
++ Found in branch: nats-test
++ Found in branch: proddeployment_05032018
+Process: [101/112] cps-identifeye
+Process: [100/112] curator
+Process: [99/112] customerportal
+Process: [98/112] customers
+Process: [97/112] d2d
+Process: [96/112] d2d-smp
+Process: [95/112] d2d-ui
+Process: [94/112] datadog
+Process: [93/112] datamovement
+Process: [92/112] dd-metrics
+Process: [91/112] dispatch
+Process: [90/112] dmc-compliance
+Process: [89/112] dmc-compliance-search
+Process: [88/112] docker-consul-lb
+Process: [87/112] dtdc-ordering-esb
+Process: [86/112] dummy-service
+Process: [85/112] ebs-monitor
+Process: [84/112] ecr-cleanup
++ Found in branch: HEAD
++ Found in branch: master
+Process: [83/112] elastalert
+Process: [82/112] events
+Process: [81/112] fabia
++ Found in branch: sandbox
+Process: [80/112] falkor
+Process: [79/112] federated-search
+Process: [78/112] ffmpeg
++ Found in branch: HEAD
++ Found in branch: master
+Process: [77/112] fuac
+Process: [76/112] git-elasticsearch
+Process: [75/112] go-hel
+Process: [74/112] halstub
+Process: [73/112] hashi-ui
++ Found in branch: HEAD
++ Found in branch: master
++ Found in branch: sandbox
+Process: [72/112] hello-owf
+Process: [71/112] http2https-redirect
+Process: [70/112] iam
+Process: [69/112] images
+Process: [68/112] imagetransform
++ Found in branch: add-memory
++ Found in branch: before_convert_to_go
++ Found in branch: sergiodev
+Process: [67/112] influxdb
+Process: [66/112] iris-ui
+Process: [65/112] iris-ui-amethyst
+Process: [64/112] iris-ui-beryl
+Process: [63/112] iris-ui-coral
+Process: [62/112] iris-ui-fox
+Process: [61/112] iris-ui-lahm
+Process: [60/112] itunes-transporter-dms
+Process: [59/112] janus
+Process: [58/112] kapacitor
+Process: [57/112] keycloak
+Process: [56/112] keycloak-test
+Process: [55/112] keycloakproxy
+Process: [54/112] logger
+Process: [53/112] logs
+Process: [52/112] lookups
+Process: [51/112] media-analyzer
++ Found in branch: HEAD
++ Found in branch: NewAudioJobs
++ Found in branch: OWANLZR-34
++ Found in branch: OWANLZR-38
++ Found in branch: aws_auth
++ Found in branch: dev-audio-analyzer
++ Found in branch: dev-kc
++ Found in branch: force-build
++ Found in branch: master
++ Found in branch: test
++ Found in branch: vault-integration
++ Found in branch: web-api-for-mediainfo-job
+Process: [50/112] mediainfo
+Process: [49/112] metadata-ingest
+Process: [48/112] metadata-repository
+Process: [47/112] metric-shipper
+Process: [46/112] metrics
+Process: [45/112] minimal
++ Found in branch: HEAD
++ Found in branch: master
+Process: [44/112] netflix-package-verifier
+Process: [43/112] notify
+Process: [42/112] nuget
++ Found in branch: HEAD
++ Found in branch: add_meta
++ Found in branch: master
+Process: [41/112] one-delivery
+Process: [40/112] one-ingest
+Process: [39/112] one-mediamorph-adapter
+Process: [38/112] one-orders
+Process: [37/112] one-orders-ui
+Process: [36/112] one-packaging
+Process: [35/112] one-packaging-batch-unencrypted
+Process: [34/112] order-aggregation
+Process: [33/112] owfiam
+Process: [32/112] platal
+Process: [31/112] quality-assurance
++ Found in branch: HEAD
++ Found in branch: master
+Process: [30/112] queues
+Process: [29/112] sailor
+Process: [28/112] sample-multitier-docker
+Process: [27/112] sherlock
+Process: [26/112] sonarqube
++ Found in branch: HEAD
++ Found in branch: master
+Process: [25/112] spark-trigger
+Process: [24/112] spec-verifier
+Process: [23/112] specrepo
+Process: [22/112] splunk-forwarder
+Process: [21/112] starship
+Process: [20/112] status
+Process: [19/112] superglue
+Process: [18/112] tal
+Process: [17/112] templating
+Process: [16/112] templating-ui
+Process: [15/112] titles
+Process: [14/112] transcode-ffmpeg
+Process: [13/112] transcode-hybrik
++ Found in branch: fixing_subtitles
++ Found in branch: nullpointer_bug
++ Found in branch: removing_changed_atlas_values
+Process: [12/112] transform-preparser
+Process: [11/112] transformer
+Process: [10/112] tt-post-checks
+Process: [9/112] ttman
+Process: [8/112] validator
++ Found in branch: HEAD
++ Found in branch: master
+Process: [7/112] vault-test
+Process: [6/112] vfs
+Process: [5/112] virtualcinema
+Process: [4/112] watermarking
+Process: [3/112] web-watch-direct
+Process: [2/112] workflowcomposer
+Process: [1/112] workflows
