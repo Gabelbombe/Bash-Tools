@@ -1,9 +1,9 @@
-#!/usr/local/bin/bash -x
+#!/usr/local/bin/bash
 # Youtube to MP3 BASH script to steal shit...
 
 CPR='Jd Daniel :: Gabelbombe'
 MOD="$(date +'%Y-%m-%d @ %H:%M:%S')"
-VER='7.1.2'
+VER='7.1.4'
 
 # REF : https://github.com/Gabelbombe/Bash-Tools/blob/master/TOYS/y2m.sh
 # REQ : https://github.com/aadsm/JavaScript-ID3-Reader
@@ -121,15 +121,6 @@ function ere_quote () {
   return 9
 }
 
-## set comments
-declare COMMENTS="
-[CPR] ${CPR}
-[MOD] ${MOD}
-[VER] ${VER}
-[REF] ${video}
-"
-
-
 echo -e "[info] Using directory: ${save}"
 
 regex='v=(.*)'
@@ -139,6 +130,15 @@ regex='v=(.*)'
   ## argsmap
   video_id="${BASH_REMATCH[1]}"
   video_id="$(echo ${video_id}| cut -d'&' -f1)"
+
+
+  ## set comments
+  declare COMMENTS="
+  [CPR] ${CPR}
+  [MOD] ${MOD}
+  [VER] ${VER}
+  [REF] ${video_id}
+  "
 
   ## remove thumb if exists
   [ -f 'thumbnail.jpg' ] && {
@@ -180,7 +180,7 @@ regex='v=(.*)'
         -ab 320k                       \
         -ac 2                          \
         -vn                            \
-        -y "${title}".mp3
+        -y "${title}.mp3"
 
 
   ## add ${save} with LAME since FFMPEG changes too much....
@@ -193,8 +193,6 @@ regex='v=(.*)'
    "${title}.mp3" "${save}/${title}.mp3"
 
   rm -fr "${tmp_dir}" ## oikology...
-  exit
-
 } || {
   echo -e "[fatal] The Universe doesn't give a fuck about your feelings..."
 }
