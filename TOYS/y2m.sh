@@ -3,7 +3,7 @@
 
 CPR='Jd Daniel :: Gabelbombe'
 MOD="$(date +'%Y-%m-%d @ %H:%M:%S')"
-VER='7.1.0'
+VER='7.1.2'
 
 # REF : https://github.com/Gabelbombe/Bash-Tools/blob/master/TOYS/y2m.sh
 # REQ : https://github.com/aadsm/JavaScript-ID3-Reader
@@ -39,13 +39,13 @@ function print_usage()
   '
 }
 
-## following requires modern GNU bash 4.4 you loser....
+## following requires modern GNU bash 3.2 you loser....
 if (shopt -s nocasematch ; [[ ${1} = @(-h|--help) ]]) ; then
-  print_usage ; return 1
+  print_usage ; exit 1
 
 ## because you're a lazy cunt...
 elif [[ "${1}" =~ $isurl ]] ; then
-  title="${1}"
+  video="${1}"
 
 else
   while [[ $# -gt 0 ]]; do
@@ -54,9 +54,11 @@ else
     ## no one likes a smart-ass....
     current_arg="${1}"
 
-    # if [[ "${current_arg}" =~ ^-{0,1}.* ]] ; then
+    # Broken, needs to detect opt args and current_arg
+    # [[ -z "${opt}" ]] || [[ "${current_arg}" =~ ^-{0,1}.* ]] && {
     #   echo -e "[fatal] The Universe doesn't give a fuck about your feelings..."
-    # fi
+    #   exit 6
+    # }
 
     case "${opt}" in
       "-t"|"--title"      ) title="${1}" ; shift ;;
@@ -66,7 +68,7 @@ else
 
       ## version out...
       "-v"|"--version"    ) echo -e "[info] Current verion is ${VER}"
-                            return 1
+                            exit 1
                           ;;
 
       ## advanced flags, buyer beware...
@@ -77,12 +79,12 @@ else
 
       "--flush"           ) echo -e "[info] Flushing caches..."
                             youtube-dl --no-check-certificate --rm-cache-dir
-                            return 1
+                            exit 1
                           ;;
 
       "--update"          ) echo -e "[info] Force updating youtube-dl..."
                             sudo youtube-dl -U
-                            return 1
+                            exit 1
                           ;;
 
       ## you sir, just boiled the fuckin ocean..
@@ -114,7 +116,7 @@ function ere_quote () {
 [ "x${save}"  == "x" ] && { save="/Users/${USER}/Music/" ; }
 
 ## save location exists?
-[ ! -d "${save}" ]     && {
+[ ! -d "${save}" ] && {
   echo -e "[fatal] Directory '${save}' does not not exist..."
   return 9
 }
@@ -131,14 +133,12 @@ declare COMMENTS="
 echo -e "[info] Using directory: ${save}"
 
 regex='v=(.*)'
-[[ "${video}" =~ $regex ]] && {
+
+[[ ${video} =~ ${regex} ]] && {
 
   ## argsmap
   video_id="${BASH_REMATCH[1]}"
   video_id="$(echo ${video_id}| cut -d'&' -f1)"
-  filename=$(basename "${FILEPATH}")
-  extension="${filename##*.}"
-
 
   ## remove thumb if exists
   [ -f 'thumbnail.jpg' ] && {
@@ -149,27 +149,24 @@ regex='v=(.*)'
   ## get/set thumbnail for MP3
   if [[ "x${cover}" == "x" && ! -f "${cover}" ]] ; then
     echo -e "[info] Downloading thumbnail"
-    youtube-dl --no-check-certificate "${debug}" --no-warnings --write-thumbnail "${video}" -o thumbnail.jpg
+    youtube-dl --no-check-certificate ${debug} --no-warnings --write-thumbnail ${video} -o thumbnail.jpg
   else
     echo -e "[info] Using ${cover} as thumbail"
     cp -ri "${cover}" thumbnail.jpg
   fi
 
-
   ## if you haven't defined a title....
   [ "x${title}" == "x" ] && {
-    title="$(youtube-dl --no-check-certificate "${debug}" --no-warnings --get-title "${video}" |sed s/://g)"
+    title="$(youtube-dl --no-check-certificate ${debug} --no-warnings --get-title ${video} |sed s/://g)"
   }
 
   echo -e "[info] Title is: ${title}"
 
-
   # download the FLV stream
-  youtube-dl --no-check-certificate "${debug}" --no-warnings -o "${title}" "${video}"
+  youtube-dl --no-check-certificate ${debug} --no-warnings -o "${title}" ${video}
 
   artist="$(echo ${title} |awk -F ' - ' '{print$1}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
-  title="$(echo ${title}  |awk -F ' - ' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
-
+  song="$(echo ${title}  |awk -F ' - ' '{print$2}' |sed -e 's/\[.*//g' -e 's/  */ /g' -e 's/^ *\(.*\) *$/\1/')"
 
   ## format independant, might need: head -n1, also hates ( ) [ ] etc
   video=$(ls |grep "${artist}")
@@ -178,7 +175,7 @@ regex='v=(.*)'
 
   ## REQ: FFMPEG proper installers via
   ## https://github.com/Gabelbombe/Bash-Tools/tree/master/STANDUP
-  ffmpeg -i "$video"                   \
+  ffmpeg -i "${video}"                 \
         -acodec libmp3lame             \
         -ab 320k                       \
         -ac 2                          \
@@ -190,13 +187,14 @@ regex='v=(.*)'
   lame --preset insane -V0 --id3v2-only --ignore-tag-errors \
        --ti 'thumbnail.jpg'                                 \
        --ta "${artist}"                                     \
-       --tt "${title}"                                      \
+       --tt "${song}"                                       \
        --tv "TPE2=${artist}"                                \
        --tc "${COMMENTS}"                                   \
-   "${title}".mp3 "${save}/${title}.mp3"
+   "${title}.mp3" "${save}/${title}.mp3"
 
+  rm -fr "${tmp_dir}" ## oikology...
+  exit
 
-  rm -f "${tmp_dir}" ## oikology...
 } || {
   echo -e "[fatal] The Universe doesn't give a fuck about your feelings..."
 }
